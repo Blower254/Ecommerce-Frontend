@@ -1,0 +1,14 @@
+/* Filter.css */
+.filter-container {
+    margin: 20px;
+    margin-right: 40px;
+    padding: 10px;
+    border-radius: 15px;
+    width: 200px;
+    height: 60vh;
+    background-color: #ffddee;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+  
