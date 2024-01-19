@@ -1,0 +1,186 @@
+.shopping-cart{
+    
+}
+
+.nav-cart-icon {
+    color: white;
+    height: 30px;
+    width: 30px;
+}
+.off-canvas {
+    background-image: url('https://images.unsplash.com/photo-1601598851547-4302969d0614?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha channel (0.7) to control opacity */
+  }
+  .offcanvas-hearder{
+    border-bottom: 1px solid #ddd;
+  }
+  .offcanvas-title{
+    font-family: 'Caprasimo', serif;
+    font-size: 30px;
+    font-weight: 400;
+  }
+
+.cart-items {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-item-component {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Updated to space-between */
+    margin:  5px;
+    padding: 5px;
+    width: 100%;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+    transition: transform 0.5s ease-in-out;
+    animation: pulse-component 1.5s infinite;
+
+
+}
+.cart-item-component:hover {
+    transform: scale(1.04);
+}
+
+.cart-img {
+    width: 60px;
+    margin: 5px;
+    padding: 2px;
+    margin-right: 10px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+}
+
+.item-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Updated to flex-start */
+    justify-content: center;
+    text-align: start;
+}
+
+.cart-desc {
+    display: none;
+}
+.refresh, 
+.cart-delete-icon {
+    cursor: pointer;
+    color: rgba(0, 128, 0, 0.68);
+    width: 40px;
+    height: 20px;
+    transition: transform 0.3s ease-in-out;
+
+}
+.refresh {
+    color: white;
+    position: relative;
+    animation: pulse 1.5s infinite;
+  }
+
+
+.refresh-button:hover::before{
+    content: 'Search';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    background-color: rgba(0, 0, 255, 0.637);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    margin-top: -40px;
+  }
+  .refresh-button:hover::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 8px solid transparent;
+    border-top-color: blue;
+    transform: translateX(-50%);
+    margin-top: -40px;
+
+  }
+  .search-button:hover:hover::before {
+    opacity: 1;
+  }
+  
+.refresh:hover, .cart-delete-icon:hover{
+    transform: scale(1.5);
+    color: rgb(3, 3, 55);
+}
+.checkout-section{
+    margin: 10px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+/* Basic styling for the checkout button */
+.checkout-section .checkout-btn {
+    width: 100%;
+    background-color: #4caf50; /* Green background color */
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Padding for better visual appearance */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Add cursor on hover */
+    transition: background-color 0.3s ease-in-out; /* Smooth transition for background color */
+  }
+  
+  /* Hover effect */
+  .checkout-section .checkout-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+ 
+  /* Box shadow for a subtle lift effect */
+  .checkout-section .checkout-btn {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+  }
+ 
+  
+
+
+
+
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+  
+    50% {
+      transform: scale(1.2);
+    }
+  
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes pulse-component {
+    0% {
+      transform: scale(0.98);
+    }
+  
+    50% {
+      transform: scale(1);
+    }
+  
+    100% {
+      transform: scale(0.98);
+    }
+  }

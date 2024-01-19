@@ -1,14 +1,84 @@
 /* Filter.css */
-.filter-container {
-    margin: 20px;
-    margin-right: 40px;
+
+/* General styles */
+.filter-field {
+    cursor: pointer;
+    font-family: muli;
+    color: goldenrod;
+  }
+  
+  .filter-icon {
+    margin-left: 5px;
+  }
+  
+  /* Offcanvas styles */
+  .offcanvas-body {
+    padding: 20px;
+  }
+  
+  /* Category filter styles */
+  .filter-category {
+    margin-bottom: 20px;
+  }
+  
+  .filter-category h5 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .filter-category select {
+    width: 100%;
     padding: 10px;
-    border-radius: 15px;
-    width: 200px;
-    height: 60vh;
-    background-color: #ffddee;
-    position: fixed;
-    top: 0;
-    left: 0;
-}
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  /* Price filter styles */
+  .filter-price {
+    margin-bottom: 20px;
+  }
+  
+  .filter-price h5 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .filter-price label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .filter-price input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  /* Preview component styles */
+  .filter-preview {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .filter-preview h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .filter-preview p {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  /* Apply Filter button styles */
+  .apply-filter-button {
+    width: 100%;
+    margin-top: 20px;
+  }
   

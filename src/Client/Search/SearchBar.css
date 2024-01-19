@@ -1,0 +1,69 @@
+/* SearchBar.css */
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    
+  }
+  
+  .search-input {
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    background-color: transparent;
+    color: black;
+    font-family: muli;
+    padding-left: 20px;
+  }
+  
+  
+  .search-icon {
+    cursor: pointer;
+    border-radius: 5px;
+    color: goldenrod;
+    width: 25px;
+    height: 25px;
+  }
+  .search-button{
+    padding: 5px;
+    position: relative;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    /* Additional styling for your button */
+  }
+  .search-button:hover::before{
+    content: 'Search';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    background-color: rgba(0, 0, 255, 0.637);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    margin-top: -40px;
+  }
+  .search-button:hover::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 8px solid transparent;
+    border-top-color: blue;
+    transform: translateX(-50%);
+    margin-top: -40px;
+
+  }
+  .search-button:hover:hover::before {
+    opacity: 1;
+  }
