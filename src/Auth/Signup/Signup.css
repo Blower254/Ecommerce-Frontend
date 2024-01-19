@@ -1,0 +1,58 @@
+/* Signup.css */
+
+.signup-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+   
+  }
+  
+  .signup-heading {
+    text-align: center;
+    color: #333;
+  }
+  
+  .form-floating {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .form-control:focus {
+    border-color: #3498db;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  }
+  
+  .error {
+    color: #e74c3c;
+    margin-top: 0.25rem;
+  }
+  
+  .btn-primary {
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  }
+  
+  .btn-primary:hover {
+    background-color: #2980b9;
+    color: #fff;
+  }
+  
