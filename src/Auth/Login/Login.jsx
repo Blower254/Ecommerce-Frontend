@@ -4,6 +4,9 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import './Login.css';  // Make sure to import your Login.css file
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
@@ -15,8 +18,24 @@ const LoginSchema = Yup.object().shape({
 });
 
 function Login() {
+
+  const navigate = useNavigate();
   // Function to handle login logic
   const handleLogin = async (values) => {
+
+    signInWithEmailAndPassword(auth, values.email, values.password)
+    .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/products")
+        console.log(user);
+        toast.success("Logged in Successfully");
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+    });
     console.log(values);
     // Add your login logic here
   };

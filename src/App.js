@@ -13,6 +13,7 @@ import Nav from './NavBar/Nav';
 import Auth from './Auth/Auth';
 import Login from './Auth/Login/Login';
 import Signup from './Auth/Signup/Signup';
+import Home from './Pages/Homepage/Home';
 
 function App() {
   const isAuthRoute = window.location.pathname.startsWith('/auth');
@@ -25,6 +26,8 @@ function App() {
         <div className="main-content">
           
           <Routes>
+            <Route path="/" element={<Home/>} />
+
             <Route path="/category" element={<Category />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/product/:productId" element={<Product />} />
