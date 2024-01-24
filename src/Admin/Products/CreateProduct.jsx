@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function CreateProduct() {
   // State to hold form data
@@ -51,7 +52,7 @@ function CreateProduct() {
       // Make an API request to upload the product
       const response = await axios.post('YOUR_API_ENDPOINT', formData);
       console.log('Product uploaded successfully:', response.data);
-
+      toast.success('Product uploaded successfully');
       // Clear the form after successful submission
       setFormData({
         id: '',
@@ -68,8 +69,10 @@ function CreateProduct() {
       setImagePreview('');
     } catch (error) {
       console.error('Error uploading product:', error);
+      toast.error("Error uploading product!");
     }
-  };  return (
+  };  
+  return (
     <div>
       <h2>Create Product</h2>
       <form onSubmit={handleSubmit}>

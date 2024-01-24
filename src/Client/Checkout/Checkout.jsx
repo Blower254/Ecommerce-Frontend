@@ -56,14 +56,14 @@ function Checkout() {
           </div>
           <div className='checkout-refresh '><FaArrowsRotate onClick={handleRefresh}/> </div>
           <div className='total-component'>        
-            <p className="checkout-total-price">Total Price: ${totalPrice.toFixed(2)}</p>
+            <p className="checkout-total-price">Total Price: ${totalPrice}</p>
           </div>
         </div>
         <ul className="checkout-cart-items">
           {cartItems.map((item) => (
             <li key={item.id} className="checkout-cart-item">
               <div className="checkout-cart-img">
-                <img src={item.image} alt="cart img" className="checkout-cart-img" />
+                <img src={item.images[0]} alt="cart img" className="checkout-cart-img" />
               </div>
               <div className="checkout-item-fields">
                 <div className="checkout-cart-item-title">{item.title}</div>

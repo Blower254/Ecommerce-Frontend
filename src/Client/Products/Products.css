@@ -1,298 +1,219 @@
+/* Products.css */
 
-
-.product-container{
-    margin: 10px;
-    margin-left: 40px;
+.product-container {
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    
+    width: 95%;
+    padding: 20px;
+    margin: 40px;
   }
   
   .product-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 40px;
-  }
- 
-  .product-card {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
+    
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    
     border-radius: 8px;
     overflow: hidden;
-    padding: 10px;
-    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    height: var(--bs-card-height);
-    color: var(--bs-body-color);
-    word-wrap: break-word;
-    background-clip: border-box;
-    border: none;
-    border-radius: var(--bs-card-border-radius);
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-    border-radius: 15px;
-    
+    transition: box-shadow 0.3s ease-in-out;
+    width: 250px ;
+    margin: 10px;
+    backdrop-filter: blur(19px) saturate(200%);
+    -webkit-backdrop-filter: blur(19px) saturate(200%);
+    background-color: rgba(255, 255, 255, 0.36);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+    background-color: #50E3C2;
+    background-image: 
+        radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%), 
+        radial-gradient(at 82% 65%, hsl(198.00, 100%, 50%) 0, transparent 55%);
   }
   
   .product-card:hover {
-    transform: scale(1.05);
-
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-/* PopupStyles.css */
-
-.popup-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 90%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  height: 80%;
-}
-.close-div{
-display: flex;
-justify-content: right;
-margin-right: 20px;
-}
-/* Add this to your existing FunctionalComponent.css */
-
-.Close-Icon {
-  color: red;
-  height: 25px;
-  width: 25px;
-  cursor: pointer; /* Add pointer cursor for better user interaction */
-  transition: color 0.3s ease; /* Smooth transition for color change */
-}
-
-.Close-Icon:hover {
-  transform: scale(1.2); /* Increase size on hover */
-  color: darkred; /* Change color on hover */
-}
-
-
-
-
-.product-card{
-  height: 100%;
-}
-
   .product-image {
+    height: 200px;
+    object-fit:inherit;
     width: 100%;
-    max-height: 300px;
-    object-fit:initial;
   }
-  .product-card img{
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+  
+  .placeholder-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background-color: #eee;
+    color: #777;
   }
-  .product-card .content-section{
-    background-position: center;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-    min-height: 100%;
+  
+  .content-section {
+    padding: 15px;
   }
-  .product-card .card-body {
-   
-    color: black;
-    backdrop-filter: blur(6px) saturate(117%);
-    -webkit-backdrop-filter: blur(6px) saturate(117%);
-    background-color: rgba(255, 255, 255, 0.36);
-    border-radius: 12px;
-    border: 1px solid rgba(209, 213, 219, 0.3);;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    box-shadow: 0 36px 28px -20px rgba(0, 0, 0, 0.20);
-
-    
+  
+  .body-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   
   .product-title {
-    font-size: 18px;
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  
+  .product-category {
+    font-size: 0.9rem;
+    color: #888;
     margin-bottom: 10px;
-    color: #ff6d39;
-    font-family: "muli";
-    font-weight: bold;
-    display: inline-block;
+  }
+  
+  .star-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .star-filled {
+    color: #ffd700;
+  }
+  
+  .star-empty {
+    color: #ccc;
+  }
+  
+  .rating-text {
+    margin-left: 5px;
+    font-size: 0.8rem;
+    color: #888;
+  }
+  
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
   }
   
   .product-price {
-    font-weight: 600;
-    color: #f87622;
-    font-size: 18px;
-    margin-bottom: 5px;
-    position: relative;
-  }
-
-  
-  .body-content{
-    margin-bottom: 40px;
- 
-  }
-  .product-category {
-    font-size: 14px;
-    color: #cf092c;
-    margin-bottom: 10px;
-    font-family: -apple-system, ".SFNSText-Regular", 'Helvetica Neue', sans-serif;
-    margin-bottom: 40px;
-
-  }
-  
-  .product-rating {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    margin-bottom: 20px;
-    padding: 10px;
-    color: #ffcc00; /* Yellow color for rating */
-  }
-  
-  .product-rating::before {
-    content: '\2605'; /* Unicode character for a solid star */
-    font-size: 18px;
-    margin-right: 5px;
-    color: #ffcc00; /* Yellow color for star */
-  }
-  
-  .product-rating::after {
-    margin-left: 5px;
-    color: #666; /* Gray color for the separator */
-  }
-  .card-footer{
-    width: 100%;
-    display: flex;
-    justify-content:space-evenly;
-    align-items: center;
-    gap: 10px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    margin-top: 10px;
-    border: none;
-    padding: 10px;
+    font-size: 1.2rem;
   }
   
   .cart-icon {
-    color: blue;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 30px;
-    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 5px; /* Adjust as needed */
+    font-size: 1.5rem;
+    color: #333;
   }
   
-  .cart-icon:hover {
-    color: #8c0615;
-    cursor: pointer;
-    border: 1px solid #8c0615;
-  }
   .pagination {
-    position: sticky;
-    bottom: 20px;
-    left: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    background-color: white;
   }
   
   .pagination ul {
     list-style: none;
-    padding: 0;
     display: flex;
+    padding: 0;
   }
   
   .pagination li {
     cursor: pointer;
-    padding: 8px 12px;
-    margin: 0 4px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
   }
   
   .pagination li:hover {
-    background-color: #eee;
+    background-color: #f0f0f0;
   }
   
   .pagination li.active {
-    background-color: #cf092c; /* Accent color for active page */
+    background-color: #007bff;
     color: #fff;
   }
- 
-  /* Add this to your existing CSS or create a new CSS file */
+  /* Products.css */
 
-.btn {
-  position: relative;
-  /* Additional styling for your button */
-}
-
-.product-container .btn:hover::before {
-  content: 'View';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-  background-color: rgba(51, 51, 51, 0.689);
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  margin-top: -40px;
-
-}
-
-.product-container .btn:hover::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  border: 8px solid transparent;
-  border-top-color: rgba(51, 51, 51, 0.719);
-  transform: translateX(-50%);
-  margin-top: -45px;
-
-}
-
-.product-container .btn:hover:hover::before {
-  opacity: 1;
-}
-
-
-.star-rating {
-  display: flex;
-  align-items: center;
-}
-
-.star-filled {
-  color: gold; /* You can choose any color for filled stars */
-}
-
-.star-empty {
-  color: #ddd; /* You can choose any color for empty stars */
+/* Add a general styling for mobile devices */
+@media only screen and (max-width: 767px) {
+    .product-container {
+        width: 100%;
+      }
+      
+    .product-card {
+      width: 200px;
+      height: 400px;
+      margin-bottom: 15px;
+    }
   
-  opacity: 0.5; /* You can adjust the opacity for empty stars */
-}
-
-.rating-text {
-  margin-left: 5px;
-}
+    .product-image {
+      height: 200px;
+      object-fit:inherit;
+      width: 100%;
+    }
+  
+    .pagination {
+      margin-top: 15px;
+    }
+  }
+  
+  /* Add more specific styling for smaller screens if needed */
+  @media only screen and (max-width: 480px) {
+    .product-container {
+        width: 100%;
+        margin: 10px;
+        padding: 10px;
+      }
+      .products{
+        width: 100%;
+      }
+      .product-list {
+        width: 100%;
+      }
+      .product-card {
+        width: 300px;
+        margin-bottom: 15px;
+      }
+    .product-image {
+      height: 200px;
+    }
+  
+    .product-title {
+      font-size: 14px;
+    }
+  
+    .product-category {
+      font-size: 0.8rem;
+    }
+  
+    .star-rating {
+      margin-bottom: 5px;
+    }
+  
+    .rating-text {
+      font-size: 0.7rem;
+    }
+  
+    .product-price {
+      font-size: 1rem;
+    }
+  
+    .cart-icon {
+      font-size: 1.2rem;
+    }
+  }
+  

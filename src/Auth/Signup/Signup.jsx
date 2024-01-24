@@ -8,6 +8,7 @@ import './Signup.css';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
+import axios from 'axios';
 
 // Regular expressions for validation
 const usernameRegex = /^[a-zA-Z0-9_.-]{6,20}$/;
@@ -38,20 +39,42 @@ function Signup() {
 
   // Handle signup form submission
   const handleSignup = async (values) => {
-
     try {
-      console.log(values);
+      // Include the userId in the values object
       await createUserWithEmailAndPassword(auth, values.email, values.password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log(user);
+        .then(async (userCredential) => {
+          // Signed in
+          const newUser = userCredential.user;
+          console.log(newUser);
+
+          // Update the user context with the new user information
+          const updatedValues = {
+            ...values,
+            useruid: newUser.uid,
+          };
+
+          // Send the updatedValues to the server
+          try {
+            console.log(updatedValues);
+            const response = await axios.post('http://localhost:5000/api/signup', updatedValues);
+            const newUserFromServer = response.data.newUser;
+            localStorage.setItem('user', JSON.stringify(newUserFromServer));
+
+            console.log('new User from server:', newUserFromServer);
+
+            // Update the context with the new data
+
+            // The user state should be updated at this point, so it should log correctly in useEffect
             navigate('/auth/login');
             toast.success('Account Created Successfully');
-        })
-     
+          } catch (error) {
+            console.error('Error sending signup data:', error);
+          }
+        });
+
     } catch (error) {
-      // Handle signup errors
+      toast.error("Error Signing Up! Ensure to use Unique Username or Login");
+
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error(errorCode, errorMessage);

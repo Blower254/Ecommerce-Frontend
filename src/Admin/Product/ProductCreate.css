@@ -1,0 +1,146 @@
+::-webkit-scrollbar {
+  width: 7px; /* Set the width of the scrollbar */
+  margin: 20px;
+}
+::-webkit-scrollbar-corner{
+  border-radius: 13px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Set the border radius of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Set the color of the scrollbar thumb on hover */
+  margin: 20px;
+  padding: 20px;
+}
+
+::-webkit-scrollbar-button {
+  display: none; /* Hide the scrollbar buttons */
+}
+
+
+.product-create-form {
+  margin-bottom: 3rem;
+}
+
+.product-create-input {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Add any additional styles as needed */
+
+/* Loading component styles */
+.product-create-container {
+  position: relative;
+}
+
+.product-create-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  z-index: 1000;
+}
+
+.product-create-component{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.create-container {
+    max-width: 80%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+   
+  }
+  
+  
+  .form-floating {
+    position: relative;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+  
+  .form-control {
+    width: 40%;
+
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .form-control:focus {
+    border-color: #3498db;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+  }
+  
+  .error {
+    color: #e74c3c;
+    margin-top: 0.25rem;
+  }
+  
+  .btn-primary {
+    background-color: #3498db;
+    color: #fff;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  }
+  
+  .btn-primary:hover {
+    background-color: #2980b9;
+    color: #fff;
+  }
+  
+ .image-priview{
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+ 
+  }
+  
+  .image-priview-container{
+    width: 400px;
+    height: 600px;
+    border: 1px solid #ddd;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    border-radius: 12px;
+  }

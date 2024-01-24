@@ -1,9 +1,10 @@
+
 .App {
   text-align: center;
   background-color: #ddd;
   background: url('https://media.giphy.com/media/2tNvsKkc0qFdNhJmKk/giphy.gif') no-repeat ;
   background-size: cover;
-  
+  min-height: 120vh;
 
 }
 

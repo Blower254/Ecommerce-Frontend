@@ -1,42 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Products.css'; // Import the external CSS file
-import {  FaEye } from "react-icons/fa6";
-//import Product from './Product'; 
-//import { AiFillCloseCircle } from "react-icons/ai";
+import './Products.css';
+import { FaEye } from "react-icons/fa6";
 import Loading from '../Loading/Loading';
 import { useNavigate } from 'react-router-dom';
+
 
 function Products() {
   const [products, setProducts] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8); // Set the number of items per page
-  const navigate = useNavigate(); 
-  //const [selectedProduct, setSelectedProduct] = useState(null);
+  const [itemsPerPage] = useState(8);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://fakestoreapi.com/products/');
-        setProducts(response.data);
+        // Fetch products from the API
+        const response = await axios.get('http://localhost:5000/api/products');
+        const fetchedProducts = response.data;
+
+        // Save products to local storage
+        localStorage.setItem('products', JSON.stringify(fetchedProducts));
+
+        // Set products in the state
+        setProducts(fetchedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
-    fetchProducts();
+      // If products are not in local storage, fetch them
+      fetchProducts();
+    
   }, []);
 
- 
 
   const handleCardClick = (product) => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product._id}`);
   };
-  // Calculate the index of the last item on the current page
+
   const indexOfLastItem = currentPage * itemsPerPage;
-  // Calculate the index of the first item on the current page
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // Get the current items to display on the page
   const currentProducts = products && products.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => {
@@ -49,7 +53,7 @@ function Products() {
         ★
       </span>
     ));
-  
+
     return (
       <div className="star-rating">
         {stars}
@@ -59,45 +63,49 @@ function Products() {
       </div>
     );
   };
+
   return (
     <div className="product-container">
+      <div>
+        
+      </div>
       {currentProducts ? (
-        <div className="row product-list">
+        <div className=" product-list">
           {currentProducts.map((product) => (
-             <div key={product.id} className="col-md-3 mb-4 d-flex check">
-             <div className="product-card" onClick={() => handleCardClick(product)}>
-                <img src={product.image} alt={product.title} className="card-img  product-image" />
+            <div key={product._id} className="products">
+              <div className="product-card">
+                {product.images && product.images.length > 0 ? (
+                  <img src={product.images[0]} alt={product.title} className="card-img  product-image" />
+                ) : (
+                  <div className="placeholder-image">No Image</div>
+                )}
                 <div className='content-section'>
-                <div className="card-body">
-                  <div className='body-content'>
+                  <div className="card-body">
+                    <div className='body-content'>
                       <h3 className="card-title product-title">{product.title}</h3>
                       <p className="card-text product-category">{product.category}</p>
                       {product.rating ? (
-                          <StarRating rate={Math.round(product.rating.rate)} count={product.rating.count} />
-                        ) : (
-                          <p className="card-text product-rating">Rating: 0</p>
-                        )}
+                        <StarRating rate={Math.round(product.rating.rate)} count={product.rating.count} />
+                      ) : (
+                        <p className="card-text product-rating">Rating: 0</p>
+                      )}
                     </div>
-                  <div className='card-footer'>
-                    <p className="card-text product-price">${product.price}</p>
-                    
-                    <button className="btn " >
-                      <FaEye   className='cart-icon'/>
-                    </button>
+                    <div className='card-footer'>
+                      <p className="card-text product-price">${product.price}</p>
+                      <button className="btn "  onClick={() => handleCardClick(product)}>
+                        <FaEye className='cart-icon'/>
+                      </button>
+                    </div>
                   </div>
-                </div>
                 </div>
               </div>
             </div>
           ))}
-
         </div>
       ) : (
         <div ><Loading/></div>
       )}
-   
-      
-      {/* Pagination */}
+
       <div className="shadow-lg p-3  bg-white rounded pagination">
         {products && (
           <ul>

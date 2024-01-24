@@ -3,9 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(4px) saturate(174%);
-    -webkit-backdrop-filter: blur(4px) saturate(174%);
-    background-color: rgba(255, 255, 255, 0.27);
-    border-radius: 12px;
-    box-shadow: rgba(250, 244, 244, 0.4) 0px 30px 90px;
+    width: 100%;
+   
+    
 }

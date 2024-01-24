@@ -18,4 +18,4 @@ function FiltersSection() {
   )
 }
 
-export default FiltersSection
+export default FiltersSection;
