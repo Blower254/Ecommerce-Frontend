@@ -46,7 +46,7 @@ function Product() {
       console.log("items to be added to cart", updatedItem); // 'Item added to the cart successfully'
 
 
-      axios.post('http://localhost:5000/api/cart/add', updatedItem)
+      axios.post('https://ecommerce-api-k87g.onrender.com/api/cart/add', updatedItem)
       
       .then(response => {
 
