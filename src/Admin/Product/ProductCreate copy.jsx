@@ -84,7 +84,7 @@ function ProductCreates() {
       // Use 'formData' to update your form state or perform other actions
   
       // Example: Using Axios to submit the form data to a server
-      await axios.post("http://localhost:5000/api/products", formData);
+      await axios.post("https://ecommerce-api-k87g.onrender.com/api/products", formData);
   
       // Reset form and state after successful submission
       resetForm();
