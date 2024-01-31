@@ -17,6 +17,7 @@ function Products() {
       try {
         // Fetch products from the API
         const response = await axios.get('https://ecommerce-api-k87g.onrender.com/api/products');
+        console.log(response.data);
         const fetchedProducts = response.data;
 
         // Save products to local storage
