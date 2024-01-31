@@ -60,7 +60,7 @@ function Signup() {
           // Send the updatedValues to the server
           try {
             console.log(updatedValues);
-            const response = await axios.post('http://localhost:5000/api/signup', updatedValues);
+            const response = await axios.post('https://ecommerce-api-k87g.onrender.com/api/signup', updatedValues);
             const newUserFromServer = response.data.newUser;
             localStorage.setItem('user', JSON.stringify(newUserFromServer));
 
