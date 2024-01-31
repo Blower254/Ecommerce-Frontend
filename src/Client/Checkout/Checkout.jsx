@@ -18,7 +18,7 @@ function Checkout() {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       const { _id: userId } = user;
-      const response = await axios.get(`http://localhost:5000/api/cart?userId=${userId}`);
+      const response = await axios.get(`https://ecommerce-api-k87g.onrender.com/api/cart?userId=${userId}`);
       const cartData = response.data.cart;
       console.log(cartData);
       if (Array.isArray(cartData) && cartData.length > 0) {
