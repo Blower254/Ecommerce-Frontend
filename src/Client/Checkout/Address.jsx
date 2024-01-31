@@ -25,7 +25,7 @@ function Address() {
       const userId = user?._id;
 
       if (userId) {
-        const response = await axios.get(`http://localhost:5000/api/address?userId=${userId}`);
+        const response = await axios.get(`https://ecommerce-api-k87g.onrender.com/api/address?userId=${userId}`);
         setAddresses(response.data);
         if (response.data.length > 0) {
           setHasAddress(true);
