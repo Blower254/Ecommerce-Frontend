@@ -8,7 +8,7 @@ function Category() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/categories');
+        const response = await axios.get('https://ecommerce-api-k87g.onrender.com/api/categories');
         setCategories(response.data);
         console.log(response.data);
       } catch (error) {
