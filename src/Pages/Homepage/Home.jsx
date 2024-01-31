@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
+//import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -26,30 +25,14 @@ const Home = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleLogout = () => {
-        // Perform logout action
-    console.log("Logging out...");
-        
-    signOut(auth).then(() => {
-        // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
-            console.log("Error!");
-        });
-
-    window.location.reload();
-    navigate('/');
-  };
+ 
 
   return (
     <section>
       {user ? (
         <div>
-          Welcome, {user.email}
-          <button onClick={handleLogout}>
-            Logout
-          </button>
+          Welcome , {user.email}
+          
         </div>
       ) : (
         <div>User is logged out</div>

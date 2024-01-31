@@ -1,12 +1,14 @@
-import React from 'react';
+// Import necessary libraries and components
+import React, { useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { useFormik } from 'formik';
-import './Login.css';  // Make sure to import your Login.css file
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './Login.css';  // Make sure to import your Login.css file
+import Loading from '../../Client/Loading/Loading';
 
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
@@ -18,37 +20,32 @@ const LoginSchema = Yup.object().shape({
 });
 
 function Login() {
-
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   // Function to handle login logic
-  const handleLogin = async (values) => {
+  const handleLogin = async (values, { setSubmitting }) => {
+    try {
+      setIsLoading(true); // Set loading to true when starting the login process
 
-    signInWithEmailAndPassword(auth, values.email, values.password)
-    .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        navigate("/products")
-        console.log(user);
-        toast.success("Logged in Successfully");
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-    });
-    console.log(values);
-    // Add your login logic here
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+      console.log(user);
+      const response = await axios.post('http://localhost:5000/api/login', user);
+      const newUser = response.data.user;
+
+      localStorage.setItem('user', JSON.stringify(newUser));
+      toast.success("Logged in Successfully");
+      navigate("/products");
+    } catch (error) {
+      const errorMessage = error.message;
+      console.error(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
+      setIsLoading(false); // Set loading to false when login process is complete
+    }
   };
-
-  // Formik hook for form state management
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: LoginSchema,
-    onSubmit: handleLogin,
-  });
 
   return (
     <div className="login-container">
@@ -76,9 +73,9 @@ function Login() {
             <ErrorMessage name="password" component="div" className="error" />
           </div>
 
-          {/* Submit button */}
-          <button type="submit" className="btn btn-primary mt-3">
-            Login
+          {/* Submit button with loading indicator */}
+          <button type="submit" className="btn btn-primary mt-3" disabled={isLoading}>
+            {isLoading ? <Loading /> : 'Login'}
           </button>
         </Form>
       </Formik>

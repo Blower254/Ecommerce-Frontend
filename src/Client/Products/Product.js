@@ -43,12 +43,16 @@ function Product() {
       const newItem = { ...product, userId, quantity: 1 };
       const updatedItem = { ...newItem, productId: newItem._id };
       console.log("new item", updatedItem);
-      
+      console.log("items to be added to cart", updatedItem); // 'Item added to the cart successfully'
+
 
       axios.post('http://localhost:5000/api/cart/add', updatedItem)
+      
       .then(response => {
+
         if (response.data.success) {
-          console.log(response.data.message); // 'Item added to the cart successfully'
+
+          console.log( response.data.message); // 'Item added to the cart successfully'
           toast.success(response.data.message);
         } else {
           console.error('Error:', response.data.message);
@@ -85,7 +89,7 @@ function Product() {
         <div className="product-info">
           <h2 className="product-title">{product.title}</h2>
           <p className='product-description'> {product.description} </p>
-          <p className="product-category">Category: {product.category}</p>
+          <p className="product-category">Category: {product.category.name}</p>
           {product.rating ? (
             <p className="product-rating">
               Rating: {product.rating.rate} ({product.rating.count} reviews)

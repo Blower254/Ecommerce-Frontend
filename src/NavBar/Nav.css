@@ -1,0 +1,138 @@
+/* Navbar.css */
+.navbar-nav {
+   margin-left: 5%;
+  }
+  
+  .navbar .logo {
+    font-size: 1.5rem;
+  }
+  
+  .logo-section{
+    margin-left: 40px;
+  }
+  .logo{
+    width: 120px;
+    height: 50px;
+  }
+  .navbar .links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: rem;
+    transition: transform 0.3s ease-in-out; /* Add a transition effect for smooth animation */
+  }
+  
+  .navbar .links a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out; /* Add a transition effect for smooth color change */
+  }
+  
+  .navbar-links{
+    margin-left: 30px;
+  }
+  .navbar .menu-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .navbar .user-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+  }
+  
+  .navbar .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .navbar .show-menu .links,
+  .navbar .show-menu .user-info,
+  .navbar .show-menu .overlay {
+    display: flex;
+    flex-direction: column;
+  }
+  .auth{
+    display: flex;
+    border-radius: 35px;
+    justify-content: space-evenly;
+    background-color: blue;
+    padding: 10px;
+    margin-left: 200px;
+    min-width: 200px;
+  }
+  .user{
+    display: flex;
+    justify-content: space-evenly;
+    color: goldenrod;
+    padding: 10px;
+    margin-left: 200px;
+    min-width: 200px;
+  }
+  .nav-logout{
+    text-decoration: none;
+    color: red;
+    margin-left: 100px
+  }
+  .user-content{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center ;
+    gap: 0.5rem;
+    background-color: rgba(0, 140, 255, 0.349);
+    padding: 5px;
+    border-radius: 30px;
+    padding-left: 10px;
+    padding-right: 20px;
+    color: goldenrod;
+    
+  }
+  .profile-icon{
+    height: 20px;
+    width: 20px;
+    color: blue;
+  }
+  /* Media Query for Screens Smaller Than 768px */
+  @media (max-width: 768px) {
+    .navbar .links {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #333;
+      width: 100%;
+      padding: 1rem;
+      transform: translateX(100%); /* Hide off-screen initially */
+    }
+  
+    .navbar .show-menu .links {
+      display: flex;
+      transform: translateX(0); /* Slide in when the menu is shown */
+    }
+  
+    .navbar .menu-icon,
+    .navbar .user-info {
+      display: block;
+    }
+  
+    .navbar .user-info {
+      
+      width: 100%;
+      padding: 1rem;
+    }
+  
+    .navbar .overlay {
+      display: block;
+    }
+    .user, .auth{
+      margin-left: 20px;
+    }
+  }

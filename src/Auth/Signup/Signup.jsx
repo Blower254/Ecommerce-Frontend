@@ -1,5 +1,5 @@
 // Import necessary libraries and components
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import axios from 'axios';
+import Loading from '../../Client/Loading/Loading';
 
 // Regular expressions for validation
 const usernameRegex = /^[a-zA-Z0-9_.-]{6,20}$/;
@@ -36,10 +37,13 @@ const SignupSchema = Yup.object().shape({
 // Signup component
 function Signup() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle signup form submission
   const handleSignup = async (values) => {
     try {
+      setIsLoading(true); // Set loading to true when starting the signup process
+
       // Include the userId in the values object
       await createUserWithEmailAndPassword(auth, values.email, values.password)
         .then(async (userCredential) => {
@@ -69,6 +73,9 @@ function Signup() {
             toast.success('Account Created Successfully');
           } catch (error) {
             console.error('Error sending signup data:', error);
+          } finally {
+            setIsLoading(false); // Set loading to false when signup process is complete
+            navigate('/');
           }
         });
 
@@ -78,6 +85,7 @@ function Signup() {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error(errorCode, errorMessage);
+      setIsLoading(false); // Set loading to false in case of an error
     }
   };
 
@@ -132,8 +140,8 @@ function Signup() {
             <ErrorMessage name="confirmPassword" component="div" className="error" />
           </div>
 
-          <button type="submit" className="btn btn-primary mt-3">
-            Signup
+          <button type="submit" className="btn btn-primary mt-3" disabled={isLoading}>
+            {isLoading ? <Loading /> : 'Signup'}
           </button>
         </Form>
       </Formik>

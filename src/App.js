@@ -18,6 +18,7 @@ import Profile from './UserProfile/Profile';
 //import ProductCreate from './Admin/Product/ProductCreate';
 //import YourFormComponent from './Admin/Product/ProductCreate copy';
 import ProductCreates from './Admin/Product/ProductCreate copy';
+import EmbedChatComponent from './EmbeddedChatComponent';
 function App() {
   const isAuthRoute = window.location.pathname.startsWith('/auth');
 
@@ -27,7 +28,6 @@ function App() {
         {isAuthRoute ? null : <Nav />} {/* Conditionally render Nav */}
         
         <div className="main-content">
-          
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/profile" element={<Profile/>} />
@@ -43,6 +43,7 @@ function App() {
             <Route path="/test" element={<Filter />} />
             <Route path="/checkout" element={<Checkout />} />
           </Routes>
+          <EmbedChatComponent/>
         </div>
         <ToastContainer />
       </div>

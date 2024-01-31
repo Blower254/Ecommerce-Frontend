@@ -1,12 +1,24 @@
 .shopping-cart{
-    
+   border: 1px solid #ddd; 
 }
 
 .nav-cart-icon {
-    color: white;
+    color: black;
     height: 30px;
     width: 30px;
+    
 }
+
+
+.cart-item-count {
+ 
+  background-color: #ff0000; /* Set the background color as needed */
+  color: #ffffff; /* Set the text color as needed */
+  font-size: 10px; /* Set the font size as needed */
+  padding: 3px 6px; /* Set padding as needed */
+  border-radius: 50%; /* Make it a circle */
+}
+
 .off-canvas {
     background-image: url('https://images.unsplash.com/photo-1579547944064-0180251f94c8?q=80&w=1878&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     background-position: center;
@@ -23,7 +35,7 @@
   }
   
   .off-canvas {
-    width: 300px;
+    width: 700px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
@@ -141,6 +153,54 @@
     transform: scale(1.5);
     color: rgb(3, 3, 55);
 }
+
+
+/* ShoppingCart.css */
+
+.delete-icon-section {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-edit {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-button {
+  background-color: #27517e;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-quantity-button {
+  margin-left: 10px;
+}
+.quantity-input{
+  max-width: 45px;
+
+  width: auto;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.cart-price {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.cart-delete-icon {
+  cursor: pointer;
+  color: #dc3545;
+  margin-left: 10px;
+}
+
+
+
+
+
 .checkout-section{
     margin: 10px;
     padding: 10px;

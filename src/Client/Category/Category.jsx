@@ -8,8 +8,9 @@ function Category() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://api.escuelajs.co/api/v1/categories');
+        const response = await axios.get('http://localhost:5000/api/categories');
         setCategories(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }

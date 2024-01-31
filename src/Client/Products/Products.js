@@ -72,7 +72,7 @@ function Products() {
       {currentProducts ? (
         <div className=" product-list">
           {currentProducts.map((product) => (
-            <div key={product._id} className="products">
+            <div key={product._id} className="products" onClick={() => handleCardClick(product)}>
               <div className="product-card">
                 {product.images && product.images.length > 0 ? (
                   <img src={product.images[0]} alt={product.title} className="card-img  product-image" />
@@ -83,7 +83,7 @@ function Products() {
                   <div className="card-body">
                     <div className='body-content'>
                       <h3 className="card-title product-title">{product.title}</h3>
-                      <p className="card-text product-category">{product.category}</p>
+                      <p className="card-text product-category">{product.category.name}</p>
                       {product.rating ? (
                         <StarRating rate={Math.round(product.rating.rate)} count={product.rating.count} />
                       ) : (

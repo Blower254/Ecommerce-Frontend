@@ -12,46 +12,41 @@ function ShoppingCart() {
   const [show, setShow] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
+  const [editedQuantities, setEditedQuantities] = useState({});
+  const [isEditingQuantity, setIsEditingQuantity] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // Function to remove an item from the cart
   const removeFromCart = async (itemId) => {
     try {
-      // Make a DELETE request to remove the item from the cart
-      console.log(itemId);
       await axios.delete(`http://localhost:5000/api/cart/remove/${itemId}`);
       toast.success('Item removed from cart');
-      // After successful removal, refresh the cart
       fetchCart();
-  
-      // Display a success message
-     
     } catch (error) {
-      // Display an error message if the removal fails
       toast.error('Error removing item from cart');
       console.error(error);
     }
   };
-  
 
   const handleCheckout = () => {
     toast("Happy Shopping 😊");
     handleClose();
-    navigate('/checkout', { cartItems: cartItems }); // Pass the cart items to the checkout page
+    navigate('/checkout');
   };
 
-  const handleRefresh = async () => {
+  const handleViewProduct = (item) => {
+    navigate(`/product/${item.productId}`);
+  };
+
+  const handleRefresh = () => {
     try {
       fetchCart();
       toast("Refresh Success!");
     } catch (error) {
       console.error('Error fetching user data:', error);
-      // Handle the error as needed
     }
   };
-  
 
   const fetchCart = async () => {
     try {
@@ -59,7 +54,6 @@ function ShoppingCart() {
       const { _id: userId } = user;
       const response = await axios.get(`http://localhost:5000/api/cart?userId=${userId}`);
       const cartData = response.data.cart;
-      console.log(cartData);
       setCartItems(cartData);
     } catch (error) {
       toast.error('Error fetching cart');
@@ -69,12 +63,53 @@ function ShoppingCart() {
 
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, []); 
+
+  const toggleEditQuantity = (item) => {
+    setEditedQuantities({
+      ...editedQuantities,
+      [item.cartItemId]: item.quantity,
+    });
+    setIsEditingQuantity(!isEditingQuantity);
+  };
+
+  const handleIncrement = (cartItemId) => {
+    setEditedQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [cartItemId]: (prevQuantities[cartItemId] || 1) + 1,
+    }));
+  };
+
+  const handleDecrement = (cartItemId) => {
+    if ((editedQuantities[cartItemId] || 1) > 1) {
+      setEditedQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [cartItemId]: (prevQuantities[cartItemId] || 1) - 1,
+      }));
+    }
+  };
+
+  const handleQuantityChange = async (item) => {
+    try {
+      await axios.put(`http://localhost:5000/api/cart/update`, {
+        cartItemId: item.cartItemId,
+        quantity: editedQuantities[item.cartItemId],
+      });
+
+      toast.success('Quantity updated successfully');
+      fetchCart();
+      setIsEditingQuantity(false);
+    } catch (error) {
+      toast.error('Error updating quantity');
+      console.error(error);
+    }
+  };
 
   return (
     <div className='shopping-cart'>
       <div>
         <FaCartShopping className='nav-cart-icon' onClick={handleShow} />
+        <span className='cart-item-count'>{cartItems.length}</span>
       </div>
 
       <Offcanvas show={show} onHide={handleClose} placement="end" className="off-canvas">
@@ -88,24 +123,67 @@ function ShoppingCart() {
           ) : (
             <ul className='cart-items'>
               {cartItems.map(item => (
-                  <div key={item.productId} className="cart-item-component">
-                    <div className='cart-img-component'>
-                      <img src={item.image} alt="cart pic" className='cart-img' />
-                    </div>
-                    <div className='item-fields'>
-                      <div className='cart-item-title'>{item.title}</div>
-                      <div className='item-info'>
-                        <div className='cart-desc'>{item.description}</div>
-                        <div className='cart-category'>{item.category}</div>
-                        <div className='cart-price'>{item.price}</div>
-                      </div>
-                    </div>
-                    <div className='delete-icon-section'>
-                      <MdDelete className="cart-delete-icon" size="sm" onClick={() => removeFromCart(item.productId)} />
+                <div key={item.cartItemId} className="cart-item-component" >
+                  <div className='cart-img-component'>
+                    <img src={item.image} alt="cart pic" className='cart-img' />
+                  </div>
+                  <div className='item-fields'>
+                    <div className='cart-item-title' onClick={() => handleViewProduct(item)}>{item.title}</div>
+                    <div className='item-info'>
+                      <div className='cart-desc'>{item.description}</div>
+                      <div className='cart-category'>{/*  category  */}</div>
+                      <div className='cart-price'>{item.price}</div>
                     </div>
                   </div>
-                ))}
-
+                  <div className='delete-icon-section'>
+                    {isEditingQuantity ? (
+                      <div className='quantity-edit'>
+                        <button className='quantity-button' onClick={() => handleDecrement(item.cartItemId)}>
+                          -
+                        </button>
+                        <input
+                          type='number'
+                          className='quantity-input'
+                          value={editedQuantities[item.cartItemId] || 1}
+                          onChange={(e) => setEditedQuantities({
+                            ...editedQuantities,
+                            [item.cartItemId]: parseInt(e.target.value, 10) || 1,
+                          })}
+                          min='1'
+                        />
+                        <button className='quantity-button' onClick={() => handleIncrement(item.cartItemId)}>
+                          +
+                        </button>
+                        <Button
+                          variant='success'
+                          size='sm'
+                          className='edit-quantity-button'
+                          onClick={() => handleQuantityChange(item)}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className='cart-price'>{item.quantity}</div>
+                        <Button
+                          variant='primary'
+                          size='sm'
+                          className='edit-quantity-button'
+                          onClick={() => toggleEditQuantity(item)}
+                        >
+                          Edit
+                        </Button>
+                        <MdDelete
+                          className='cart-delete-icon'
+                          size='sm'
+                          onClick={() => removeFromCart(item.cartItemId)}
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
             </ul>
           )}
         </Offcanvas.Body>

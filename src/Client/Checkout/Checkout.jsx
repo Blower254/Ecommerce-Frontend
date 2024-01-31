@@ -1,45 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { FaArrowsRotate } from 'react-icons/fa6';
-import { MdDelete } from 'react-icons/md';
+import React, { useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
-import './Checkout.css'; // Import the external CSS file
+import './Checkout.css';
+import axios from 'axios';
+import { MdDelete } from "react-icons/md";
+import { Link } from 'react-router-dom';
+import Address from './Address';
 
 function Checkout() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
- 
-  const handleRefresh = () =>{
-    const storedCartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    setCartItems(storedCartItems);
-    toast("Refresh Success");
+  useEffect(() => {
+    fetchCart(); // Fetch cart items on component mount
+  });
 
-    const total = storedCartItems.reduce((acc, item) => acc + item.price, 0);
-    setTotalPrice(total);
+  const fetchCart = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const { _id: userId } = user;
+      const response = await axios.get(`http://localhost:5000/api/cart?userId=${userId}`);
+      const cartData = response.data.cart;
+      console.log(cartData);
+      if (Array.isArray(cartData) && cartData.length > 0) {
+        setCartItems(cartData);
+      } else {
+        setCartItems([]);
+        toast.info('Your cart is empty.');
+      }
+    } catch (error) {
+      toast.error('Error fetching cart');
+      console.error(error);
+    }
   };
 
 
   useEffect(() => {
-    // Fetch cart items from local storage on component mount
-    const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    setCartItems(storedCartItems);
+    // Check if cartItems is not undefined or empty before calculating total price
+    if (Array.isArray(cartItems) && cartItems.length > 0) {
+      const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+      setTotalPrice(total);
+    }
+  }, [cartItems]);
 
-    // Calculate total price
-    const total = storedCartItems.reduce((acc, item) => acc + item.price, 0);
-    setTotalPrice(total);
-  }, []);
 
-  const updateTotalPrice = (updatedCart) => {
-    const total = updatedCart.reduce((acc, item) => acc + item.price, 0);
-    setTotalPrice(total);
+  const removeFromCart = async (itemId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/cart/remove/${itemId}`);
+      toast.success('Item removed from cart');
+      fetchCart(); // Refresh the cart immediately after removing an item
+    } catch (error) {
+      toast.error('Error removing item from cart');
+      console.error(error);
+    }
   };
 
-  const removeFromCart = (itemId) => {
-    const updatedCart = cartItems.filter((item) => item.id !== itemId);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
-    setCartItems(updatedCart);
-    updateTotalPrice(updatedCart);
-  };
 
   const handlePayment = (method) => {
     // Handle payment logic based on the selected method
@@ -54,37 +68,40 @@ function Checkout() {
           <div className='checkout-header'>
             <h2 className="checkout-cart-title">Your Cart</h2>
           </div>
-          <div className='checkout-refresh '><FaArrowsRotate onClick={handleRefresh}/> </div>
           <div className='total-component'>        
             <p className="checkout-total-price">Total Price: ${totalPrice}</p>
           </div>
         </div>
         <ul className="checkout-cart-items">
-          {cartItems.map((item) => (
-            <li key={item.id} className="checkout-cart-item">
-              <div className="checkout-cart-img">
-                <img src={item.images[0]} alt="cart img" className="checkout-cart-img" />
-              </div>
-              <div className="checkout-item-fields">
-                <div className="checkout-cart-item-title">{item.title}</div>
-                <div className="checkout-item-info">
-                  <div className="checkout-cart-desc">{item.description}</div>
-                  <div className="checkout-cart-category">{item.category}</div>
-                  <div className="checkout-cart-price">$ {item.price}</div>
+          {Array.isArray(cartItems) && cartItems.length > 0 ? (
+            cartItems.map((item) => (
+              <li key={item.id} className="checkout-cart-item">
+                <div className="checkout-cart-img">
+                  <img src={item.image} alt="checkout pic" className='cart-img' />
                 </div>
-              </div>
-              <div className="checkout-delete-icon-section">
-                <MdDelete
-                  className="checkout-cart-delete-icon"
-                  size="sm"
-                  onClick={() => removeFromCart(item.id)}
-                />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+                <div className="checkout-item-fields">
+                  <div className="checkout-cart-item-title">{item.title}</div>
 
+                  <div className="checkout-item-info">
+                    <div className="checkout-cart-desc">{item.description}</div>
+                    <div className="checkout-cart-price">$ {item.price}</div>
+                  </div>
+                </div>
+                <div className='delete-icon-section'>
+                    <div className='cart-price'>{item.quantity}</div>
+                    <MdDelete className="cart-delete-icon" size="sm" onClick={() => removeFromCart(item.cartItemId)} />
+                  </div>
+              </li>
+            ))
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
+        </ul>
+        <Link to='/products' className='nav-link'>Continue Shopping</Link>
+      </div>
+      <div>
+        <Address/>
+      </div>
       {/* Checkout Section */}
       <div className="checkout-payment-section">
         <h2 className="checkout-title">Checkout</h2>
@@ -99,6 +116,7 @@ function Checkout() {
           Stripe
         </button>
       </div>
+      
     </div>
   );
 }
