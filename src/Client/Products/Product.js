@@ -15,7 +15,7 @@ function Product() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
+        const response = await axios.get(`https://ecommerce-api-k87g.onrender.com/api/products/${productId}`);
         console.log(response.data);
         setProduct(response.data);
       } catch (error) {
