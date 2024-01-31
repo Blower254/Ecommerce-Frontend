@@ -31,7 +31,7 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
       console.log(user);
-      const response = await axios.post('http://localhost:5000/api/login', user);
+      const response = await axios.post('https://ecommerce-api-k87g.onrender.com/api/login', user);
       const newUser = response.data.user;
 
       localStorage.setItem('user', JSON.stringify(newUser));
