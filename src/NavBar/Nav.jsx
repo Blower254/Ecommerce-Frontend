@@ -93,7 +93,7 @@ navigate('/');
           </li>
           <li className="nav-item">
             <Link className="nav-link navbar-links" to="/explore">
-              Explore
+              Blog
             </Link>
           </li>
           <li className="nav-item">
