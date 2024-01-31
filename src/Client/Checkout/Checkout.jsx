@@ -45,7 +45,7 @@ function Checkout() {
 
   const removeFromCart = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/remove/${itemId}`);
+      await axios.delete(`https://ecommerce-api-k87g.onrender.com/api/cart/remove/${itemId}`);
       toast.success('Item removed from cart');
       fetchCart(); // Refresh the cart immediately after removing an item
     } catch (error) {
