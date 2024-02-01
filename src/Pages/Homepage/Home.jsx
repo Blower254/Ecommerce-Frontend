@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../firebase';
 //import { useNavigate } from 'react-router-dom';
-import { useBaseUrl } from '../../BaseUrlContext';
+
 const Home = () => {
   const [user, setUser] = useState(null);
   //const navigate = useNavigate();
-  const {baseUrl} = useBaseUrl();
+ 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -30,7 +30,7 @@ const Home = () => {
 
   return (
     <section>
-      <p>Base Url {baseUrl}</p>
+      
       {user ? (
         <div>
           Welcome , {user.email}
