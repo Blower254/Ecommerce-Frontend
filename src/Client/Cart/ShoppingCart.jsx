@@ -7,6 +7,9 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import {useBaseUrl} from '../../BaseUrlContext';
+
+
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
@@ -14,13 +17,14 @@ function ShoppingCart() {
   const navigate = useNavigate();
   const [editedQuantities, setEditedQuantities] = useState({});
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
+  const {baseUrl} = useBaseUrl();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const removeFromCart = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/remove/${itemId}`);
+      await axios.delete(`${baseUrl}/api/cart/remove/${itemId}`);
       toast.success('Item removed from cart');
       fetchCart();
     } catch (error) {
@@ -52,7 +56,7 @@ function ShoppingCart() {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       const { _id: userId } = user;
-      const response = await axios.get(`http://localhost:5000/api/cart?userId=${userId}`);
+      const response = await axios.get(`${baseUrl}/api/cart?userId=${userId}`);
       const cartData = response.data.cart;
       setCartItems(cartData);
     } catch (error) {
@@ -91,7 +95,7 @@ function ShoppingCart() {
 
   const handleQuantityChange = async (item) => {
     try {
-      await axios.put(`http://localhost:5000/api/cart/update`, {
+      await axios.put(`${baseUrl}/api/cart/update`, {
         cartItemId: item.cartItemId,
         quantity: editedQuantities[item.cartItemId],
       });

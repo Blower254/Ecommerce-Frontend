@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Category.css'; // Import your external CSS file
-
+import {useBaseUrl } from '../../BaseUrlContext';
 function Category() {
   const [categories, setCategories] = useState([]);
+  const {baseUrl} = useBaseUrl();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/categories');
+        const response = await axios.get(`${baseUrl}/api/categories`);
         setCategories(response.data);
         console.log(response.data);
       } catch (error) {
@@ -17,7 +18,7 @@ function Category() {
     };
 
     fetchData();
-  }, []);
+  }, [baseUrl]);
 
   return (
     <div className="category-container">

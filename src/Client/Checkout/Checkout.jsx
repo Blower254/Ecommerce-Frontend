@@ -5,10 +5,12 @@ import axios from 'axios';
 import { MdDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import Address from './Address';
+import {useBaseUrl} from '../../BaseUrlContext';
 
 function Checkout() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const {baseUrl} = useBaseUrl();
 
   useEffect(() => {
     fetchCart(); // Fetch cart items on component mount
@@ -18,7 +20,7 @@ function Checkout() {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       const { _id: userId } = user;
-      const response = await axios.get(`http://localhost:5000/api/cart?userId=${userId}`);
+      const response = await axios.get(`${baseUrl}/api/cart?userId=${userId}`);
       const cartData = response.data.cart;
       console.log(cartData);
       if (Array.isArray(cartData) && cartData.length > 0) {
@@ -45,7 +47,7 @@ function Checkout() {
 
   const removeFromCart = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/remove/${itemId}`);
+      await axios.delete(`${baseUrl}/api/cart/remove/${itemId}`);
       toast.success('Item removed from cart');
       fetchCart(); // Refresh the cart immediately after removing an item
     } catch (error) {

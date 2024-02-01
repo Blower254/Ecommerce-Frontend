@@ -7,10 +7,11 @@ import axios from "axios";
 import Loading from "../../Client/Loading/Loading";
 import { toast } from "react-toastify";
 import './ProductCreate.css';
-
+import {useBaseUrl} from '../../BaseUrlContext';
 function ProductCreates() {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const {baseUrl} = useBaseUrl();
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -84,7 +85,7 @@ function ProductCreates() {
       // Use 'formData' to update your form state or perform other actions
   
       // Example: Using Axios to submit the form data to a server
-      await axios.post("http://localhost:5000/api/products", formData);
+      await axios.post(`${baseUrl}/api/products`, formData);
   
       // Reset form and state after successful submission
       resetForm();

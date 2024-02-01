@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {useBaseUrl} from '../../BaseUrlContext';
 
 function Address() {
+  const {baseUrl} = useBaseUrl();
   const [addresses, setAddresses] = useState([]);
   const [hasAddress, setHasAddress] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
@@ -16,7 +18,7 @@ function Address() {
   // Fetch addresses on component mount
   useEffect(() => {
     fetchAddresses();
-  }, []);
+  }, [baseUrl]);
 
   // Function to fetch addresses
   const fetchAddresses = async () => {
@@ -25,7 +27,7 @@ function Address() {
       const userId = user?._id;
 
       if (userId) {
-        const response = await axios.get(`http://localhost:5000/api/address?userId=${userId}`);
+        const response = await axios.get(`${baseUrl}/api/address?userId=${userId}`);
         setAddresses(response.data);
         if (response.data.length > 0) {
           setHasAddress(true);
@@ -45,7 +47,7 @@ function Address() {
       const userId = user?._id;
 
       if (userId) {
-        const response = await axios.post(`http://localhost:5000/api/address/add`, {
+        const response = await axios.post(`${baseUrl}/api/address/add`, {
           user: userId,
           ...newAddress,
         });
@@ -68,7 +70,7 @@ function Address() {
   const handleUpdateAddress = async (addressId, updatedData) => {
     try {
         console.log(updatedData);
-      const response = await axios.put(`http://localhost:5000/api/address/update/${addressId}`, updatedData);
+      const response = await axios.put(`${baseUrl}/api/address/update/${addressId}`, updatedData);
 
       setAddresses((prevAddresses) =>
         prevAddresses.map((address) =>

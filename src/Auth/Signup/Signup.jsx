@@ -10,6 +10,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
 import axios from 'axios';
 import Loading from '../../Client/Loading/Loading';
+import { useBaseUrl } from '../../BaseUrlContext';
 
 // Regular expressions for validation
 const usernameRegex = /^[a-zA-Z0-9_.-]{6,20}$/;
@@ -38,7 +39,7 @@ const SignupSchema = Yup.object().shape({
 function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { baseUrl } = useBaseUrl();
   // Handle signup form submission
   const handleSignup = async (values) => {
     try {
@@ -60,7 +61,7 @@ function Signup() {
           // Send the updatedValues to the server
           try {
             console.log(updatedValues);
-            const response = await axios.post('http://localhost:5000/api/signup', updatedValues);
+            const response = await axios.post(`${baseUrl}/api/signup`, updatedValues);
             const newUserFromServer = response.data.newUser;
             localStorage.setItem('user', JSON.stringify(newUserFromServer));
 

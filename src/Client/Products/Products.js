@@ -4,6 +4,7 @@ import './Products.css';
 import { FaEye } from "react-icons/fa6";
 import Loading from '../Loading/Loading';
 import { useNavigate } from 'react-router-dom';
+import {useBaseUrl} from '../../BaseUrlContext';
 
 
 function Products() {
@@ -11,12 +12,13 @@ function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const navigate = useNavigate();
-
+  const {baseUrl} = useBaseUrl();
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         // Fetch products from the API
-        const response = await axios.get('http://localhost:5000/api/products');
+        const response = await axios.get(`${baseUrl}/api/products`);
         const fetchedProducts = response.data;
 
         // Save products to local storage
@@ -32,7 +34,7 @@ function Products() {
       // If products are not in local storage, fetch them
       fetchProducts();
     
-  }, []);
+  }, [baseUrl]);
 
 
   const handleCardClick = (product) => {

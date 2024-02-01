@@ -19,6 +19,7 @@ import Profile from './UserProfile/Profile';
 //import YourFormComponent from './Admin/Product/ProductCreate copy';
 import ProductCreates from './Admin/Product/ProductCreate copy';
 import EmbedChatComponent from './EmbeddedChatComponent';
+
 function App() {
   const isAuthRoute = window.location.pathname.startsWith('/auth');
 

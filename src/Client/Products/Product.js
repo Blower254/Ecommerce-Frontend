@@ -6,16 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import {useBaseUrl} from '../../BaseUrlContext'
 function Product() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {baseUrl} = useBaseUrl();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${productId}`);
+        const response = await axios.get(`${baseUrl}/api/products/${productId}`);
         console.log(response.data);
         setProduct(response.data);
       } catch (error) {
@@ -32,7 +33,7 @@ function Product() {
       toast.warning('No Product Id');
       setLoading(false);
     }
-  }, [productId]);
+  }, [productId, baseUrl]);
 
   const handleAddToCart = () => {
     try {

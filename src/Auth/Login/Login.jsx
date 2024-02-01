@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';  // Make sure to import your Login.css file
 import Loading from '../../Client/Loading/Loading';
-
+import { useBaseUrl } from '../../BaseUrlContext';
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -22,6 +22,7 @@ const LoginSchema = Yup.object().shape({
 function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { baseUrl } = useBaseUrl();
 
   // Function to handle login logic
   const handleLogin = async (values, { setSubmitting }) => {
@@ -31,7 +32,7 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
       console.log(user);
-      const response = await axios.post('http://localhost:5000/api/login', user);
+      const response = await axios.post(`${baseUrl}/api/login`, user);
       const newUser = response.data.user;
 
       localStorage.setItem('user', JSON.stringify(newUser));
