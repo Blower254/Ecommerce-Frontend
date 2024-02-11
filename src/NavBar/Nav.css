@@ -60,6 +60,20 @@
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+.user-id{
+  border: 1px solid #ddd;
+ padding: 3px 10px;
+ border-radius: 5px;
+ text-decoration: none;
+}
+.user-id Link{
+  color: red;
+}
+.user-icon{
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 .auth, .user-info {
@@ -67,7 +81,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 20px;
 }
 

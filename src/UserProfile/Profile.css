@@ -1,63 +1,23 @@
+
 /* Profile.css */
 
 .profile-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+  padding: 20px;
+}
+
+.profile-title {
+  margin-bottom: 20px;
+}
+
+.account-center {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .account-center {
+    flex-direction: row;
+    justify-content: space-between;
   }
-  
-  .profile-card {
-    height: 70vh;
-    width: 600px;
-    margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .profile-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .profile-image {
-    width: 30%;
-    height: 30%;
-    padding: 20px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-  
-  .profile-content {
-    padding: 20px;
-  }
-  
-  .profile-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .profile-text {
-    margin-bottom: 10px;
-    color: #555;
-  }
-  
-  .profile-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  .profile-btn:hover {
-    background-color: #45a049;
-  }
-  
+}

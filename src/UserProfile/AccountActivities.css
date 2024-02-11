@@ -1,0 +1,27 @@
+/* AccountActivities.css */
+
+.content {
+    margin-top: 20px;
+  }
+  
+  .ant-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .ant-menu-horizontal {
+      display: block;
+    }
+  
+    .ant-menu-horizontal .ant-menu-item,
+    .ant-menu-horizontal .ant-menu-submenu-title {
+      display: block !important;
+      width: 100%;
+      text-align: center;
+    }
+  
+    .ant-menu-horizontal .ant-menu-submenu-title {
+      padding: 8px 16px !important;
+    }
+  }
+  

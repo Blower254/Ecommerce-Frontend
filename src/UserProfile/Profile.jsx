@@ -1,11 +1,9 @@
-// Profile.jsx
-
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
-import profilePlaceholder from './profile-placeholder.png';
+import UserSection from './UserSection'; // Ensure UserSection is imported
+import AccountActivities from './AccountActivities'; // Ensure AccountActivities is imported
 import './Profile.css';
-
 function Profile() {
   const [user, setUser] = useState(null);
 
@@ -13,7 +11,6 @@ function Profile() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        console.log(user);
         setUser(user);
       } else {
         // User is signed out
@@ -26,23 +23,16 @@ function Profile() {
   }, []);
 
   return (
-    <div className="profile-container mt-5">
+    <div className="profile-container ">
       {user ? (
         <div>
-          <h2 className="profile-title">User Profile</h2>
-          <div className="profile-card">
-            <img
-              src={user.photoURL || profilePlaceholder}
-              alt="Profile"
-              className="profile-image img-fluid"
-            />
-            <h5 className="profile-title">Welcome, {user.displayName || user.email}</h5>
-            <p className="profile-text">User ID: {user.uid}</p>
-            <p className="profile-text">Email: {user.email}</p>
-            <p className="profile-text">Phone Number: {user.phoneNumber || "Null"}</p>
-            <p className="profile-text">Email Verified: {user.emailVerified ? 'Yes' : 'No'}</p>
-            <span className="profile-text">Joined Date: {user.metadata.creationTime}</span>
-            {/* Add more user details as needed */}
+          <div className='accout-center'>
+            <div>
+              <UserSection user={user} />
+            </div>
+            <div>
+              <AccountActivities />
+            </div>
           </div>
         </div>
       ) : (

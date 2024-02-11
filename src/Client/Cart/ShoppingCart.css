@@ -1,5 +1,6 @@
-.shopping-cart{
-  
+.cart-section{
+  display: flex;
+  justify-content: space-between;
   
 }
 
@@ -17,11 +18,11 @@
 
 
 .cart-item-count {
- 
+  margin-left: 2px;
   background-color: #ff0000; /* Set the background color as needed */
   color: #ffffff; /* Set the text color as needed */
   font-size: 10px; /* Set the font size as needed */
-  padding: 3px 6px; /* Set padding as needed */
+  padding: 3px 5px; /* Set padding as needed */
   border-radius: 50%; /* Make it a circle */
 }
 

@@ -1,13 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Auth.css';
+import GoogleLogin from './GoogleLogin';
 
 function Auth() {
-  // Function to handle signup with Google
-  const handleSignupWithGoogle = () => {
-    // Implement your Google signup logic here
-    console.log('Signing up with Google');
-  };
+
 
   return (
     <div className="auth-container">
@@ -23,9 +20,7 @@ function Auth() {
           Create Account
         </Link>
 
-        <button className="continue-with-google-button" onClick={handleSignupWithGoogle}>
-          Continue with Google
-        </button>
+        <GoogleLogin/>
       </div>
     </div>
   );

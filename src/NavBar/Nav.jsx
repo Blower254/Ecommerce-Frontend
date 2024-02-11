@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import { Avatar, Button, Menu } from "antd";
+import {  Button, Menu } from "antd";
 import "./Nav.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
@@ -12,7 +12,6 @@ import ShoppingCart from '../Client/Cart/ShoppingCart';
 import logo from './logo.png';
 import { FaUserCircle } from "react-icons/fa";
 
-const { SubMenu } = Menu;
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,14 +62,7 @@ const Navbar = () => {
       <Link className="navbar-brand logo-section" to="/">
         <img src={logo} alt='Home' className="logo"/>
       </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        onClick={toggleMenu}
-      >
-        {isOpen ? <CloseOutlined /> : <MenuOutlined />}
-      </button>
-
+      
       <div
         className={classNames("collapse navbar-collapse collapse-section", {
           show: isOpen,
@@ -99,14 +91,11 @@ const Navbar = () => {
         </div>
       <div className="user-info">
           {user ? (
-            <SubMenu title={<Avatar icon={<FaUserCircle />} />}>
-              <Menu.Item key="profile">
-                <Link to='/profile'>{user.email}</Link>
-              </Menu.Item>
-              <Menu.Item key="logout">
-                <Button type="link" onClick={handleLogout}>Logout</Button>
-              </Menu.Item>
-            </SubMenu>
+           <>
+                <Link to='/profile' className="user-id"><FaUserCircle className="user-icon"/>{user.displayName|| "Customer Account"}</Link>
+       
+                <Button  onClick={handleLogout}>Logout</Button>
+           </>   
           ) : (
             <div className="auth">
               <Link to="/auth/signup" className="nav-link">
@@ -118,6 +107,14 @@ const Navbar = () => {
             </div>
           )}
         </div>
+        <button
+            className="navbar-toggler"
+            type="button"
+            onClick={toggleMenu}
+          >
+            {isOpen ? <CloseOutlined /> : <MenuOutlined />}
+        </button>
+
     </nav>
   );
 };

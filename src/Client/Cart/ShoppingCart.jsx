@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { FaArrowsRotate, FaCartShopping } from 'react-icons/fa6';
+import { FaArrowsRotate } from 'react-icons/fa6';
 import './ShoppingCart.css';
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import {useBaseUrl} from '../../BaseUrlContext';
+import Link from 'antd/es/typography/Link';
 
 
 
@@ -67,7 +68,7 @@ function ShoppingCart() {
 
   useEffect(() => {
     fetchCart();
-  }, []); 
+  }); 
 
   const toggleEditQuantity = (item) => {
     setEditedQuantities({
@@ -111,8 +112,8 @@ function ShoppingCart() {
 
   return (
     <div className='shopping-cart'>
-      <div>
-        <FaCartShopping className='nav-cart-icon' onClick={handleShow} />
+      <div className='cart-section'>
+        <Link onClick={handleShow}>Cart</Link>
         <span className='cart-item-count'>{cartItems.length}</span>
       </div>
 
