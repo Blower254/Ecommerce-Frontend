@@ -4,9 +4,14 @@ import profilePlaceholder from './profile-placeholder.png';
 import './UserSection.css';
 import { Image } from 'react-bootstrap';
 
+
+
 const { Meta } = Card;
 
 const UserSection = ({ user }) => {
+   
+
+
   return (
     <Card className="profile-card" style={{ width: "100%" }}>
       <Meta

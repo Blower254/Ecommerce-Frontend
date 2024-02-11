@@ -55,6 +55,7 @@
   display: flex;
   margin-left: 15px;
   margin-right: 40px;
+
 }
 /* User info section */
 .user-info {
@@ -85,10 +86,35 @@
   gap: 20px;
 }
 
-.profile-icon {
-  margin-right: 8px; /* Adjust margin between icon and email */
-}
 
-.nav-logout {
-  margin-left: 8px; /* Adjust margin between email and logout link */
+.user-and-menubar{
+  display: flex;
+  flex-direction: row;
+}
+@media screen and (max-width: 768px) {
+  .navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-color: #1890ff;
+
+  }
+  .logo-section{
+    width: auto;
+  }
+  .navbar-brand img {
+    width: 70px;
+
+  }
+  .user-and-menubar{
+   width: 70%;
+   justify-content: space-between;
+   align-items: flex-end;
+
+  }
+  .cart-icon-section{
+    position: fixed;
+    top: 100px;
+    right: 0;
+  }
 }

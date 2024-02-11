@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
@@ -7,11 +7,14 @@ import axios from "axios";
 import Loading from "../../Client/Loading/Loading";
 import { toast } from "react-toastify";
 import './ProductCreate.css';
-import {useBaseUrl} from '../../BaseUrlContext';
+import { useBaseUrl } from '../../BaseUrlContext';
+import { Input, Button } from "antd";
+import { UploadOutlined } from '@ant-design/icons';
+
 function ProductCreates() {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const {baseUrl} = useBaseUrl();
+  const { baseUrl } = useBaseUrl();
 
   const handleFileChange = (event) => {
     const files = event.target.files;
@@ -50,14 +53,13 @@ function ProductCreates() {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-     
       setIsLoading(true);
 
-         if (isLoading) {
-            console.log("Please wait, form is still processing...");
-            return;
-          }
-      
+      if (isLoading) {
+        console.log("Please wait, form is still processing...");
+        return;
+      }
+
       const urls = await Promise.all(
         images.map(async (image) => {
           try {
@@ -113,67 +115,66 @@ function ProductCreates() {
         <div className="product-create-component">
         <Form className='product-create-form'>
         <div className="form-floating mb-3">
-
-          <label htmlFor="title">Title:</label>
-          <Field type="text" id="title" name="title" className='form-control' />
+     
+          <Input type="text" id="title" name="title" placeholder="Title" />
           <ErrorMessage name="title" component="div" />
         </div>
+        
         <div className="form-floating mb-3">
-
-          <label htmlFor="price">Price:</label>
-          <Field type="text" id="price" name="price"  className='form-control'/>
+      
+          <Input type="text" id="price" name="price" placeholder="Price" />
           <ErrorMessage name="price" component="div" />
-          </div>
-        <div className="form-floating mb-3">
-
-          <label htmlFor="description">Description:</label>
-          <Field as="textarea" id="description" name="description"  className='form-control'/>
-          <ErrorMessage name="description" component="div" />
-          </div>
-        <div className="form-floating mb-3">
-
-          <label htmlFor="category">Category:</label>
-          <Field type="text" id="category" name="category" className='form-control'/>
-          <ErrorMessage name="category" component="div" />
-          </div>
-        <div className="form-floating mb-3">
-
-          <label htmlFor="rating.rate">Rating:</label>
-          <Field type="number" id="rating.rate" name="rating.rate" className='form-control'/>
-          <ErrorMessage name="rating.rate" component="div" />
-          </div>
-        <div className="form-floating mb-3">
-
-          <label htmlFor="rating.count">Rating Count:</label>
-          <Field type="number" id="rating.count" name="rating.count" className='form-control'/>
-          <ErrorMessage name="rating.count" component="div" />
-          </div>
-
-          <input
-            type="file"
-            multiple
-            name="images"
-            onChange={handleFileChange}
-          />
-          <ErrorMessage name="images" component="div" />
-          
-          <button type="submit" disabled={isLoading}>
-            Submit
-          </button>
-        </Form>
-        <div className="image-priview-container">
-              <h2>Selected Images:</h2>
-             <div className="image-priview-container">
-              {images.map((image, index) => (
-                <img key={index} src={URL.createObjectURL(image)} className="image-priview" alt={`Preview ${index}`} />
-              ))}
-            </div>
-           </div>
         </div>
-      }
-      </Formik>
+        
+        <div className="form-floating mb-3">
+    
+          <Input.TextArea id="description" name="description" placeholder="Description"/>
+          <ErrorMessage name="description" component="div" />
+        </div>
+        
+        <div className="form-floating mb-3">
+         
+          <Input type="text" id="category" name="category"  placeholder="Category"/>
+          <ErrorMessage name="category" component="div" />
+        </div>
+        
+        <div className="form-floating mb-3">
+         
+          <Input type="number" id="rating.rate" name="rating.rate" placeholder="rate"/>
+          <ErrorMessage name="rating.rate" component="div" />
+        </div>
+        
+        <div className="form-floating mb-3">
+          
+          <Input type="number" id="rating.count" name="rating.count" placeholder="rate count"/>
+          <ErrorMessage name="rating.count" component="div" />
+        </div>
+
+        <Input
+          type="file"
+          multiple
+          name="images"
+          onChange={handleFileChange}
+        />
+        <ErrorMessage name="images" component="div" />
+        
+        <Button type="submit" className='btn' disabled={isLoading}>
+          Submit
+        </Button>
+      </Form>
+      <div className="image-priview-container">
+        <h2>Selected Images:</h2>
+        <div className="image-priview-container">
+          {images.map((image, index) => (
+            <img key={index} src={URL.createObjectURL(image)} className="image-priview" alt={`Preview ${index}`} />
+          ))}
+        </div>
+      </div>
     </div>
-  );
+  }
+</Formik>
+</div>
+);
 }
 
 export default ProductCreates;

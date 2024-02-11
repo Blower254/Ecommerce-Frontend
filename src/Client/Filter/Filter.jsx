@@ -6,7 +6,9 @@ import { toast } from 'react-toastify';
 import './Filter.css';
 import { useBaseUrl } from '../../BaseUrlContext';
 import axios from 'axios';
-import { Select, Input, Slider } from 'antd';
+import { Select, Input } from 'antd';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 const { Option } = Select;
 
@@ -80,6 +82,18 @@ function Filter({ onApplyFilter }) {
 
           <div className="filter-price">
             <h5>Price Range</h5>
+            <Slider
+              min={0}
+              max={1000}
+              allowCross={false}
+              defaultValue={[minPrice, maxPrice]}
+              onChange={(value) => {
+                setMinPrice(value[0]);
+                setMaxPrice(value[1]);
+              }}
+              range
+            />
+
             <div className="price-inputs">
               <label>Min Price:</label>
               <Input
@@ -88,14 +102,6 @@ function Filter({ onApplyFilter }) {
                 onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
               />
             </div>
-            <Slider
-              min={0}
-              max={1000}
-              value={minPrice}
-              step={1}
-              onChange={(value) => setMinPrice(value)}
-            />
-
             <div className="price-inputs">
               <label>Max Price:</label>
               <Input
@@ -104,13 +110,6 @@ function Filter({ onApplyFilter }) {
                 onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
               />
             </div>
-            <Slider
-              min={0}
-              max={1000}
-              value={maxPrice}
-              step={1}
-              onChange={(value) => setMaxPrice(value)}
-            />
           </div>
 
           <PreviewComponent />

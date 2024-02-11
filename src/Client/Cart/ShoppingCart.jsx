@@ -61,7 +61,6 @@ function ShoppingCart() {
       const cartData = response.data.cart;
       setCartItems(cartData);
     } catch (error) {
-      toast.error('Error fetching cart');
       console.error(error);
     }
   };

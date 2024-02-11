@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Products.css';
 import { FaEye } from "react-icons/fa6";
-import Loading from '../Loading/Loading';
 import { useNavigate } from 'react-router-dom';
 import { useBaseUrl } from '../../BaseUrlContext';
 import Filter from '../Filter/Filter'; // Import the Filter component
 import Input from 'antd/es/input/Input';
+import { Spin, Pagination } from 'antd';
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -90,19 +90,16 @@ function Products() {
   return (
     <div className="product-container">
       <div className='filter-search-component'>
-         {/* Filter component with handleApplyFilter prop */}
-      <Filter onApplyFilter={handleApplyFilter} />
+        {/* Filter component with handleApplyFilter prop */}
+        <Filter onApplyFilter={handleApplyFilter} />
         <div className='search-component'>
-        <Input
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+          <Input
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-
       </div>
-
-     
 
       {currentProducts ? (
         <div className="product-list">
@@ -138,18 +135,18 @@ function Products() {
           ))}
         </div>
       ) : (
-        <div ><Loading /></div>
+        <div><Spin size='large'/></div>
       )}
 
-      <div className="shadow-lg p-3  bg-white rounded pagination">
+      <div className="shadow-lg p-3  rounded pagination">
         {products && (
-          <ul>
-            {Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }, (_, index) => (
-              <li key={index} onClick={() => paginate(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
-                {index + 1}
-              </li>
-            ))}
-          </ul>
+          <Pagination
+            current={currentPage}
+            total={filteredProducts.length}
+            pageSize={itemsPerPage}
+            onChange={paginate}
+            showSizeChanger={false}
+          />
         )}
       </div>
     </div>

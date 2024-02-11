@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Product.css';
-import { FaCartPlus } from 'react-icons/fa6';
+import { FaCartPlus } from 'react-icons/fa';
 import { CiCreditCard1 } from 'react-icons/ci';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useBaseUrl } from '../../BaseUrlContext';
 import { Image, Button } from 'react-bootstrap'; // Import Bootstrap components
+import { Spin } from 'antd';
 
 function Product() {
   const { productId } = useParams();
@@ -79,7 +80,7 @@ function Product() {
 
   if (loading) {
     // Show loading state while waiting for product details
-    return <div>Loading...</div>;
+    return <div><Spin size='large'/> </div>;
   }
 
   if (!product) {
@@ -91,8 +92,26 @@ function Product() {
     <>
       <div className="product-details">
         <div className='product-specs'>
+          <div className='image-section'>
           <div className='image-component'>
-            <Image src={product.images[selectedImageIndex]} rounded />
+            <Image src={product.images[selectedImageIndex]} className='display-image'rounded />
+            
+
+          </div>
+          <div className='all-images'>
+            <div className='image-thumbnails'>
+              {product.images.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt={`${index}`}
+                  className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
+                  onClick={() => handleThumbnailClick(index)}
+                  rounded fluid
+                />
+              ))}
+            </div>
+            </div>
           </div>
           <div className="product-info">
             <h2 className="product-title">{product.title}</h2>
@@ -118,20 +137,7 @@ function Product() {
         </div>
 
       </div>
-      <div className='all-images'>
-        <h3>All Images</h3>
-        <div className='image-thumbnails'>
-          {product.images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`${index}`}
-              className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
-              onClick={() => handleThumbnailClick(index)}
-            />
-          ))}
-        </div>
-      </div>
+      
     </>
   );
 }

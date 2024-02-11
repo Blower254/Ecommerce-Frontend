@@ -6,8 +6,6 @@ import {  Button, Menu } from "antd";
 import "./Nav.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
 import ShoppingCart from '../Client/Cart/ShoppingCart';
 import logo from './logo.png';
 import { FaUserCircle } from "react-icons/fa";
@@ -16,7 +14,6 @@ import { FaUserCircle } from "react-icons/fa";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -36,18 +33,7 @@ const Navbar = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleLogout = () => {
-    // Perform logout action
-    console.log("Logging out...");
-    
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      navigate("/");
-      console.log("Signed out successfully")
-    }).catch((error) => {
-      console.log("Error!");
-    });
-  };
+ 
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -89,12 +75,12 @@ const Navbar = () => {
           <ShoppingCart/>
 
         </div>
+      <div className="user-and-menubar">
       <div className="user-info">
           {user ? (
            <>
                 <Link to='/profile' className="user-id"><FaUserCircle className="user-icon"/>{user.displayName|| "Customer Account"}</Link>
        
-                <Button  onClick={handleLogout}>Logout</Button>
            </>   
           ) : (
             <div className="auth">
@@ -114,7 +100,7 @@ const Navbar = () => {
           >
             {isOpen ? <CloseOutlined /> : <MenuOutlined />}
         </button>
-
+        </div>
     </nav>
   );
 };

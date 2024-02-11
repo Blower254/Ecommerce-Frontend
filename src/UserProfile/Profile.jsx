@@ -4,8 +4,30 @@ import { auth } from '../firebase';
 import UserSection from './UserSection'; // Ensure UserSection is imported
 import AccountActivities from './AccountActivities'; // Ensure AccountActivities is imported
 import './Profile.css';
+import { toast } from 'react-toastify';
+import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+
 function Profile() {
   const [user, setUser] = useState(null);
+
+      const {navigate} = useNavigate();
+  
+      const handleLogout = () => {
+          // Perform logout action
+          console.log("Logging out...");
+          
+          signOut(auth).then(() => {
+            // Sign-out successful.
+            navigate("/");
+            toast("Signed out successfully")
+          }).catch((error) => {
+            console.log("Error!");
+          });
+        };
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -33,7 +55,12 @@ function Profile() {
             <div>
               <AccountActivities />
             </div>
+            <div className='logout-component'>
+             <Button  onClick={handleLogout} className="logout-btn">Logout <LogoutOutlined /> </Button>
+            </div>
           </div>
+
+
         </div>
       ) : (
         <div>User is logged out. Please log in to view the profile.</div>
