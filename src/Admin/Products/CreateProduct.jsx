@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useBaseUrl } from '../../BaseUrlContext';
 
 function CreateProduct() {
+  const {baseUrl} = useBaseUrl();
   // State to hold form data
   const [formData, setFormData] = useState({
     id: '',
@@ -50,7 +52,7 @@ function CreateProduct() {
 
     try {
       // Make an API request to upload the product
-      const response = await axios.post('YOUR_API_ENDPOINT', formData);
+      const response = await axios.post(`${baseUrl}/api/products`, formData);
       console.log('Product uploaded successfully:', response.data);
       toast.success('Product uploaded successfully');
       // Clear the form after successful submission
@@ -120,7 +122,7 @@ function CreateProduct() {
         </label>
         <br />
 
-        <button type="submit">Upload Product</button>
+        <button type="submit" onClick={ handleSubmit}>Upload Product</button>
       </form>
     </div>
   );

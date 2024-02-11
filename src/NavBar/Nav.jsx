@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import { FaUserCircle } from "react-icons/fa";
+import { Avatar, Button, Menu } from "antd";
 import "./Nav.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../firebase';
@@ -10,6 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import ShoppingCart from '../Client/Cart/ShoppingCart';
 import logo from './logo.png';
+import { FaUserCircle } from "react-icons/fa";
+
+const { SubMenu } = Menu;
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -35,19 +39,16 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Perform logout action
-console.log("Logging out...");
+    console.log("Logging out...");
     
-signOut(auth).then(() => {
-    // Sign-out successful.
-        navigate("/");
-        console.log("Signed out successfully")
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      navigate("/");
+      console.log("Signed out successfully")
     }).catch((error) => {
-        console.log("Error!");
+      console.log("Error!");
     });
-
-window.location.reload();
-navigate('/');
-};
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -58,7 +59,7 @@ navigate('/');
   };
 
   return (
-    <nav className=" navbar-expand-lg navbar-light bg-light navbar">
+    <nav className="navbar-expand-lg navbar-light bg-light navbar">
       <Link className="navbar-brand logo-section" to="/">
         <img src={logo} alt='Home' className="logo"/>
       </Link>
@@ -67,7 +68,7 @@ navigate('/');
         type="button"
         onClick={toggleMenu}
       >
-        {isOpen ? <HiOutlineX /> : <HiOutlineMenuAlt3 />}
+        {isOpen ? <CloseOutlined /> : <MenuOutlined />}
       </button>
 
       <div
@@ -75,57 +76,48 @@ navigate('/');
           show: isOpen,
         })}
       >
-        <ul className="navbar-nav ml-auto "> {/* Use ml-auto to align links to the right on large devices */}
-          <li className="nav-item">
-            <Link className="nav-link navbar-links" to="/Products">
-              Products
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link navbar-links" to="/category">
-              Categories
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link navbar-links" to="/admin/create-product">
-              Add Product
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link navbar-links" to="/explore">
-              Explore
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link navbar-links" >
-              <ShoppingCart/>
-            </Link>
-          </li>
-        </ul>
+        <Menu mode="horizontal" onClick={closeMenu}>
+          <Menu.Item key="products">
+            <Link to="/Products">Products</Link>
+          </Menu.Item>
+          <Menu.Item key="categories">
+            <Link to="/category">Categories</Link>
+          </Menu.Item>
+          <Menu.Item key="addProduct">
+            <Link to="/admin/create-product">Add Product</Link>
+          </Menu.Item>
+          <Menu.Item key="explore">
+            <Link to="/explore">Explore</Link>
+          </Menu.Item>
+        </Menu>
+        
+        
+      </div>
+      <div className="cart-icon-section">
+          <ShoppingCart/>
 
-        <div className="user-info">
+        </div>
+      <div className="user-info">
           {user ? (
-            <div className="user">
-              <Link to='/profile' className="user-content">
-                <FaUserCircle className="icon profile-icon" /> 
-              {` ${user.email}`}
-              </Link>
-              <Link to="/logout" className="nav-logout"  onClick={handleLogout}>
-                Logout
-              </Link>
-            </div>
+            <SubMenu title={<Avatar icon={<FaUserCircle />} />}>
+              <Menu.Item key="profile">
+                <Link to='/profile'>{user.email}</Link>
+              </Menu.Item>
+              <Menu.Item key="logout">
+                <Button type="link" onClick={handleLogout}>Logout</Button>
+              </Menu.Item>
+            </SubMenu>
           ) : (
             <div className="auth">
               <Link to="/auth/signup" className="nav-link">
-                Sign Up
+                <Button>Sign Up</Button>
               </Link>
               <Link to="/auth/login" className="nav-link">
-                Login
+              <Button>Login</Button>
               </Link>
             </div>
           )}
         </div>
-      </div>
     </nav>
   );
 };

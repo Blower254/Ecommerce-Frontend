@@ -20,6 +20,22 @@
     width: 100%;
     
   }
+  .filter-search-component{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 20px;
+  }
+  .search-component{
+    width: 70%;
+  }
+  .search-input{
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    width: 100%;
+    padding: 5px 20px;
+  }
   
   .product-card {
     border: 1px solid #ddd;

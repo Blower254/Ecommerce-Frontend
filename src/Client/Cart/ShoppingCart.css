@@ -1,12 +1,18 @@
 .shopping-cart{
-   border: 1px solid #ddd; 
+  
+  
 }
 
 .nav-cart-icon {
-    color: black;
+    color: blue;
     height: 30px;
     width: 30px;
+
     
+}
+.nav-cart-icon:hover{
+  color: rgba(0, 0, 255, 0.527);
+  transition: all 0.3s ease-in-out;
 }
 
 
@@ -20,7 +26,6 @@
 }
 
 .off-canvas {
-    background-image: url('https://images.unsplash.com/photo-1579547944064-0180251f94c8?q=80&w=1878&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     background-position: center;
     background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha channel (0.7) to control opacity */
   }
@@ -112,7 +117,7 @@
 
 }
 .refresh {
-    color: white;
+    color: blue;
     position: relative;
     animation: pulse 1.5s infinite;
   }

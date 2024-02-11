@@ -4,27 +4,38 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import { FaFilter } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import './Filter.css';
+import { useBaseUrl } from '../../BaseUrlContext';
+import axios from 'axios';
+import { Select, Input, Slider } from 'antd';
 
-function Filter() {
+const { Option } = Select;
+
+function Filter({ onApplyFilter }) {
   const [show, setShow] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000); // Set a default max value
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
+  const {baseUrl} = useBaseUrl();
 
   useEffect(() => {
-    // Fetch categories from the API
-    fetch('https://fakestoreapi.com/products/categories')
-      .then((response) => response.json())
-      .then((data) => setCategories(data))
-      .catch((error) => console.error('Error fetching categories:', error));
-  }, []);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/api/categories`);
+        console.log(response.data); // Log the response data
+        setCategories(response.data.map(category => category.name));
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+  
+    fetchCategories();
+  }, [baseUrl]);
 
   const handleApplyFilter = () => {
     toast(`Category: ${category}, Price Range: $${minPrice} - $${maxPrice}`);
+    onApplyFilter({ category, minPrice, maxPrice }); // Pass filter criteria to parent component
     handleClose();
   };
 
@@ -36,6 +47,9 @@ function Filter() {
       <p>Max Price: ${maxPrice}</p>
     </div>
   );
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -50,53 +64,52 @@ function Filter() {
         <Offcanvas.Body>
           <div className="filter-category">
             <h5>Category</h5>
-            <select
+            <Select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(value) => setCategory(value)}
+              style={{ width: '100%' }}
+              placeholder="Select Category"
             >
-              <option value="">Select Category</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
+                <Option key={cat} value={cat}>
                   {cat}
-                </option>
+                </Option>
               ))}
-            </select>
+            </Select>
           </div>
 
           <div className="filter-price">
             <h5>Price Range</h5>
             <div className="price-inputs">
               <label>Min Price:</label>
-              <input
+              <Input
                 type="number"
                 value={minPrice}
                 onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
               />
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1000"
+            <Slider
+              min={0}
+              max={1000}
               value={minPrice}
-              step="1"
-              onChange={(e) => setMinPrice(parseInt(e.target.value))}
+              step={1}
+              onChange={(value) => setMinPrice(value)}
             />
 
             <div className="price-inputs">
               <label>Max Price:</label>
-              <input
+              <Input
                 type="number"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
               />
             </div>
-            <input
-              type="range"
-              min="0"
-              max="1000"
+            <Slider
+              min={0}
+              max={1000}
               value={maxPrice}
-              step="1"
-              onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+              step={1}
+              onChange={(value) => setMaxPrice(value)}
             />
           </div>
 

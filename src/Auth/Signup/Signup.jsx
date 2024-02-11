@@ -44,51 +44,43 @@ function Signup() {
   const handleSignup = async (values) => {
     try {
       setIsLoading(true); // Set loading to true when starting the signup process
-
+  
       // Include the userId in the values object
-      await createUserWithEmailAndPassword(auth, values.email, values.password)
-        .then(async (userCredential) => {
-          // Signed in
-          const newUser = userCredential.user;
-          console.log(newUser);
-
-          // Update the user context with the new user information
-          const updatedValues = {
-            ...values,
-            useruid: newUser.uid,
-          };
-
-          // Send the updatedValues to the server
-          try {
-            console.log(updatedValues);
-            const response = await axios.post(`${baseUrl}/api/signup`, updatedValues);
-            const newUserFromServer = response.data.newUser;
-            localStorage.setItem('user', JSON.stringify(newUserFromServer));
-
-            console.log('new User from server:', newUserFromServer);
-
-            // Update the context with the new data
-
-            // The user state should be updated at this point, so it should log correctly in useEffect
-            navigate('/auth/login');
-            toast.success('Account Created Successfully');
-          } catch (error) {
-            console.error('Error sending signup data:', error);
-          } finally {
-            setIsLoading(false); // Set loading to false when signup process is complete
-            navigate('/');
-          }
-        });
-
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const newUser = userCredential.user;
+      console.log(newUser);
+  
+      // Update the user context with the new user information
+      const updatedValues = {
+        ...values,
+        useruid: newUser.uid,
+      };
+  
+      // Send the updatedValues to the server
+      console.log(updatedValues);
+      const response = await axios.post(`${baseUrl}/api/signup`, updatedValues);
+      const newUserFromServer = response.data.newUser;
+      localStorage.setItem('user', JSON.stringify(newUserFromServer));
+  
+      console.log('new User from server:', newUserFromServer);
+  
+      // Update the context with the new data
+  
+      // The user state should be updated at this point, so it should log correctly in useEffect
+      navigate('/auth/login');
+      toast.success('Account Created Successfully');
     } catch (error) {
       toast.error("Error Signing Up! Ensure to use Unique Username or Login");
-
+  
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error(errorCode, errorMessage);
-      setIsLoading(false); // Set loading to false in case of an error
+    } finally {
+      setIsLoading(false); // Set loading to false when signup process is complete
+      navigate('/');
     }
   };
+  
 
   // Formik form setup
   const formik = useFormik({

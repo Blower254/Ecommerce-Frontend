@@ -4,8 +4,9 @@ import './Checkout.css';
 import axios from 'axios';
 import { MdDelete } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import Address from './Address';
+//import Address from './Address';
 import {useBaseUrl} from '../../BaseUrlContext';
+import PayWithGoogle from './PayWithGoogle';
 
 function Checkout() {
   const [cartItems, setCartItems] = useState([]);
@@ -102,7 +103,8 @@ function Checkout() {
         <Link to='/products' className='nav-link'>Continue Shopping</Link>
       </div>
       <div>
-        <Address/>
+      <PayWithGoogle/>
+
       </div>
       {/* Checkout Section */}
       <div className="checkout-payment-section">
@@ -117,8 +119,8 @@ function Checkout() {
         <button className="checkout-payment-button" onClick={() => handlePayment('Stripe')}>
           Stripe
         </button>
+        
       </div>
-      
     </div>
   );
 }

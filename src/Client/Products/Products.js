@@ -4,16 +4,23 @@ import './Products.css';
 import { FaEye } from "react-icons/fa6";
 import Loading from '../Loading/Loading';
 import { useNavigate } from 'react-router-dom';
-import {useBaseUrl} from '../../BaseUrlContext';
-
+import { useBaseUrl } from '../../BaseUrlContext';
+import Filter from '../Filter/Filter'; // Import the Filter component
+import Input from 'antd/es/input/Input';
 
 function Products() {
   const [products, setProducts] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({
+    category: '',
+    minPrice: 0,
+    maxPrice: 1000
+  });
   const navigate = useNavigate();
-  const {baseUrl} = useBaseUrl();
-  
+  const { baseUrl } = useBaseUrl();
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -31,11 +38,9 @@ function Products() {
       }
     };
 
-      // If products are not in local storage, fetch them
-      fetchProducts();
-    
+    // If products are not in local storage, fetch them
+    fetchProducts();
   }, [baseUrl]);
-
 
   const handleCardClick = (product) => {
     navigate(`/product/${product._id}`);
@@ -43,10 +48,26 @@ function Products() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products && products.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Filter products based on search query and filters
+  const filteredProducts = products && products.filter(product => {
+    return (
+      (product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (product.price >= filters.minPrice && product.price <= filters.maxPrice) &&
+      (filters.category === '' || product.category.name === filters.category)
+    );
+  });
+  const currentProducts = filteredProducts && filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  // Function to handle applying filters
+  const handleApplyFilter = (filterOptions) => {
+    setFilters(filterOptions);
   };
 
   const StarRating = ({ rate, count }) => {
@@ -68,11 +89,23 @@ function Products() {
 
   return (
     <div className="product-container">
-      <div>
-        
+      <div className='filter-search-component'>
+         {/* Filter component with handleApplyFilter prop */}
+      <Filter onApplyFilter={handleApplyFilter} />
+        <div className='search-component'>
+        <Input
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        </div>
+
       </div>
+
+     
+
       {currentProducts ? (
-        <div className=" product-list">
+        <div className="product-list">
           {currentProducts.map((product) => (
             <div key={product._id} className="products" onClick={() => handleCardClick(product)}>
               <div className="product-card">
@@ -94,8 +127,8 @@ function Products() {
                     </div>
                     <div className='card-footer'>
                       <p className="card-text product-price">${product.price}</p>
-                      <button className="btn "  onClick={() => handleCardClick(product)}>
-                        <FaEye className='cart-icon'/>
+                      <button className="btn " onClick={() => handleCardClick(product)}>
+                        <FaEye className='cart-icon' />
                       </button>
                     </div>
                   </div>
@@ -105,13 +138,13 @@ function Products() {
           ))}
         </div>
       ) : (
-        <div ><Loading/></div>
+        <div ><Loading /></div>
       )}
 
       <div className="shadow-lg p-3  bg-white rounded pagination">
         {products && (
           <ul>
-            {Array.from({ length: Math.ceil(products.length / itemsPerPage) }, (_, index) => (
+            {Array.from({ length: Math.ceil(filteredProducts.length / itemsPerPage) }, (_, index) => (
               <li key={index} onClick={() => paginate(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
                 {index + 1}
               </li>
