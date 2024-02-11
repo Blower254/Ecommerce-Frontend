@@ -1,5 +1,5 @@
 const config = {
-    baseUrl: 'http://localhost:5000',
+    baseUrl: 'https://ecommerce-api-k87g.onrender.com',
   };
   
   export default config;
