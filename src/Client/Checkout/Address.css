@@ -1,0 +1,34 @@
+.address-component{
+    margin: 20px;
+    padding: 20px;
+}
+.default-nav-section{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+.default-nav-section a{
+    text-decoration: none;
+    font-size: 15px;
+}
+.available-address{
+    display: flex;
+    flex-direction: column;
+}
+.address-field{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+.route-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+
+}
+.route-links a{
+    text-decoration: none;
+}

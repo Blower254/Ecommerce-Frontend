@@ -4,59 +4,53 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase'; // Update the path accordingly
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-function GoogleLogin({ onGoogleSignIn }) {
-    const navigate = useNavigate();
-    const {login} = useContext(AuthContext);
 
-    
-    const handleLoginWithGoogle = async () => {
-        try {
-            // Create a new instance of GoogleAuthProvider
-            const provider = new GoogleAuthProvider();
+function GoogleLogin() {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
-            // Use signInWithPopup to open a Google authentication pop-up
-            const result = await signInWithPopup(auth, provider);
-            login(result.user);
+  const handleLoginWithGoogle = async () => {
+    try {
+      // Create a new instance of GoogleAuthProvider
+      const provider = new GoogleAuthProvider();
 
-            const {accessToken, displayName, email, emailVerified, phoneNumber, photoURL, uid} = result.user;
+      // Use signInWithPopup to open a Google authentication pop-up
+      const result = await signInWithPopup(auth, provider);
 
-            const user = {
-              accessToken,
-              displayName, 
-              email, 
-              emailVerified, 
-              phoneNumber, 
-              photoURL, 
-              uid
-            };
+      const { accessToken, displayName, email, emailVerified, phoneNumber, photoURL, uid } = result.user;
 
-            console.log("Google Login successful", result.user);
-            
+      const user = {
+        accessToken,
+        displayName,
+        email,
+        emailVerified,
+        phoneNumber,
+        photoURL,
+        uid
+      };
 
-            // Update the user state with the authenticated user
-            
-            console.log("Current User", user); // This might not log the updated user immediately due to useState being asynchronous
+      console.log("Google Login successful", result.user);
 
-            // Invoke the callback function passed from the parent component
-            if (onGoogleSignIn) {
-                onGoogleSignIn(result);
-            }
+      // Update the user state with the authenticated user
+      login(user);
 
-            // Redirect to the '/account' page after successful login
-            navigate('/');
-        } catch (error) {
-            console.error("Error during Google login:", error.message);
-        }
-    };
+      console.log("Current User", user);
 
-    return (
-        <button
-            className='btn google-login'
-            onClick={handleLoginWithGoogle}
-        >
-            Continue With Google <FaGoogle className='google-icon' />
-        </button>
-    );
+      // Redirect to the '/' page after successful login
+      navigate('/');
+    } catch (error) {
+      console.error("Error during Google login:", error.message);
+    }
+  };
+
+  return (
+    <button
+      className='btn google-login'
+      onClick={handleLoginWithGoogle}
+    >
+      Continue With Google <FaGoogle className='google-icon' />
+    </button>
+  );
 }
 
 export default GoogleLogin;

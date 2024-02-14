@@ -19,6 +19,8 @@ import Profile from './UserProfile/Profile';
 //import YourFormComponent from './Admin/Product/ProductCreate copy';
 import ProductCreates from './Admin/Product/ProductCreate copy';
 import EmbedChatComponent from './EmbeddedChatComponent';
+import PageNotFound from './PageNotFound';
+import Address from './Client/Checkout/Address';
 
 function App() {
   const isAuthRoute = window.location.pathname.startsWith('/auth');
@@ -43,10 +45,25 @@ function App() {
             <Route path="/admin/create-product" element={<ProductCreates/>} />
             <Route path="/test" element={<Filter />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/delivery-address" element={<Address/>} />
+
+            <Route path="*" element={<PageNotFound/>} />
+
           </Routes>
           <EmbedChatComponent/>
         </div>
-        <ToastContainer />
+        <ToastContainer 
+           position="top-center"
+           autoClose={3000}
+           hideProgressBar
+           newestOnTop={false}
+           closeOnClick
+           rtl={false}
+           pauseOnFocusLoss
+           draggable
+           pauseOnHover
+           toastContainerStyle={{ top: '50%', transform: 'translateY(-50%)' }}
+        />
       </div>
     </Router>
   );

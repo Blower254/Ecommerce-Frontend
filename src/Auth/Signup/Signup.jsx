@@ -1,6 +1,5 @@
-// Import necessary libraries and components
 import React, { useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
@@ -11,78 +10,55 @@ import { auth } from '../../firebase';
 import axios from 'axios';
 import Loading from '../../Client/Loading/Loading';
 import { useBaseUrl } from '../../BaseUrlContext';
+import GoogleLogin from '../GoogleLogin';
+import { Input } from 'antd';
 
-// Regular expressions for validation
-const usernameRegex = /^[a-zA-Z0-9_.-]{6,20}$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
-
-// Schema for form validation using Yup
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
-    .matches(usernameRegex, 'Invalid username format')
-    .min(6, 'Username must be at least 6 characters')
-    .max(20, 'Username cannot exceed 20 characters')
     .required('Username is required'),
   email: Yup.string()
-    .matches(emailRegex, 'Invalid email format')
+    .email('Invalid email format')
     .required('Email is required'),
   password: Yup.string()
-    .matches(passwordRegex, 'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character')
+    .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
 });
 
-// Signup component
 function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { baseUrl } = useBaseUrl();
-  // Handle signup form submission
+
   const handleSignup = async (values) => {
     try {
-      setIsLoading(true); // Set loading to true when starting the signup process
-  
-      // Include the userId in the values object
+      setIsLoading(true);
+
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const newUser = userCredential.user;
-      console.log(newUser);
-  
-      // Update the user context with the new user information
+
       const updatedValues = {
         ...values,
         useruid: newUser.uid,
       };
-  
-      // Send the updatedValues to the server
-      console.log(updatedValues);
+
       const response = await axios.post(`${baseUrl}/api/signup`, updatedValues);
       const newUserFromServer = response.data.newUser;
       localStorage.setItem('user', JSON.stringify(newUserFromServer));
-  
-      console.log('new User from server:', newUserFromServer);
-  
-      // Update the context with the new data
-  
-      // The user state should be updated at this point, so it should log correctly in useEffect
+
       navigate('/auth/login');
       toast.success('Account Created Successfully');
     } catch (error) {
       toast.error("Error Signing Up! Ensure to use Unique Username or Login");
-  
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
+      console.error(error.code, error.message);
     } finally {
-      setIsLoading(false); // Set loading to false when signup process is complete
+      setIsLoading(false);
       navigate('/');
     }
   };
-  
 
-  // Formik form setup
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -94,7 +70,6 @@ function Signup() {
     onSubmit: handleSignup,
   });
 
-  // JSX for the Signup component
   return (
     <div className="signup-container">
       <h2 className="signup-heading">Signup</h2>
@@ -109,27 +84,24 @@ function Signup() {
         onSubmit={handleSignup}
       >
         <Form>
-          <div className="form-floating mb-3">
-            <Field type="text" id="username" name="username" className="form-control" placeholder="Username" />
-            <label htmlFor="username">Username</label>
+          <div className='mb-2'>
+            <label htmlFor='username'>Username:</label>
+            <Input type='text' id='username' name='username' placeholder='Username' {...formik.getFieldProps('username')} />
             <ErrorMessage name="username" component="div" className="error" />
           </div>
-
-          <div className="form-floating mb-3">
-            <Field type="email" id="email" name="email" className="form-control" placeholder="name@example.com" />
-            <label htmlFor="email">Email address</label>
+          <div className='mb-2'>
+            <label htmlFor='email'>Email:</label>
+            <Input type='email' id='email' name='email' placeholder='Email' {...formik.getFieldProps('email')} />
             <ErrorMessage name="email" component="div" className="error" />
           </div>
-
-          <div className="form-floating mb-3">
-            <Field type="password" id="password" name="password" className="form-control" placeholder="Password" />
-            <label htmlFor="password">Password</label>
+          <div className='mb-2'>
+            <label htmlFor='password'>Password:</label>
+            <Input.Password id='password' name='password' placeholder='Password' {...formik.getFieldProps('password')} />
             <ErrorMessage name="password" component="div" className="error" />
           </div>
-
-          <div className="form-floating">
-            <Field type="password" id="confirmPassword" name="confirmPassword" className="form-control" placeholder="Confirm Password" />
-            <label htmlFor="confirmPassword">Confirm Password</label>
+          <div className='mb-2'>
+            <label htmlFor='confirmPassword'>Confirm Password:</label>
+            <Input.Password id='confirmPassword' name='confirmPassword' placeholder='Confirm Password' {...formik.getFieldProps('confirmPassword')} />
             <ErrorMessage name="confirmPassword" component="div" className="error" />
           </div>
 
@@ -138,9 +110,13 @@ function Signup() {
           </button>
         </Form>
       </Formik>
+      <div>
+        <br />
+        <p>OR</p>
+        <GoogleLogin />
+      </div>
     </div>
   );
 }
 
-// Export the Signup component
 export default Signup;

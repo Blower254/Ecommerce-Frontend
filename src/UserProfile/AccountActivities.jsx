@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Table } from 'antd';
+import'./AccountActivities.css';
 
 const { SubMenu } = Menu;
 

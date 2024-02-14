@@ -1,54 +1,49 @@
-import React, { useState } from "react";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebase";
+  import React, { useState } from "react";
+  import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+  import { storage } from "../../firebase";
 
-function ProductCreate() {
-  const [images, setImages] = useState([]);
-  const [imageUrls, setImageUrls] = useState([]);
+  function ProductCreate() {
+    const [images, setImages] = useState([]);
+    const [imageUrls, setImageUrls] = useState([]);
 
-  const uploadFiles = async () => {
-    const urls = [];
+    const uploadFiles = async () => {
+      const urls = [];
 
-    for (let i = 0; i < images.length; i++) {
-      const imageRef = ref(storage, `/mulitpleFiles/${images[i].name}`);
+      for (let i = 0; i < images.length; i++) {
+        const imageRef = ref(storage, `/mulitpleFiles/${images[i].name}`);
 
-      await uploadBytes(imageRef, images[i])
-        .then(async () => {
-          // Get the download URL for the uploaded image
-          const url = await getDownloadURL(imageRef);
-          urls.push(url);
-          console.log("Success");
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
-    }
+        await uploadBytes(imageRef, images[i])
+          .then(async () => {
+            // Get the download URL for the uploaded image
+            const url = await getDownloadURL(imageRef);
+            urls.push(url);
+            console.log("Success");
+          })
+          .catch((error) => {
+            console.error("Error", error);
+          });
+      }
 
-    // Update the state with the array of download URLs
-    setImageUrls(urls);
-    console.log(imageUrls);
-  };
+      // Update the state with the array of download URLs
+      setImageUrls(urls);
+      console.log(imageUrls);
+    };
 
-  console.log(images);
+    console.log(images);
 
-  // Assuming you have a function like setFormData to update the form state
-  const setFormData = (data) => {
-    // Update other form fields and set imageUrls in your form data
-  };
+    return (
+      <div className="App">
+        <input
+          type="file"
+          multiple
+          onChange={(event) => {
+            setImages(event.target.files);
+          }}
+        />
 
-  return (
-    <div className="App">
-      <input
-        type="file"
-        multiple
-        onChange={(event) => {
-          setImages(event.target.files);
-        }}
-      />
+        <button onClick={uploadFiles}>Submit</button>
+      </div>
+    );
+  }
 
-      <button onClick={uploadFiles}>Submit</button>
-    </div>
-  );
-}
-
-export default ProductCreate;
+  export default ProductCreate;

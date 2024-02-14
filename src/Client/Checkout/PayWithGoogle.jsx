@@ -1,11 +1,14 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import GooglePayButton from '@google-pay/button-react'
+import { CartContext } from '../CartContext';
 function PayWithGoogle() {
+  const {totalPrice} = useContext(CartContext);
+
   return (
     <div>
-        <div>
-            PayWithGoogle
-        </div>
+        <h1>
+            Secure Payment Gateway
+        </h1>
         <GooglePayButton
         environment="TEST"
         paymentRequest={{
@@ -34,7 +37,7 @@ function PayWithGoogle() {
           transactionInfo: {
             totalPriceStatus: 'FINAL',
             totalPriceLabel: 'Total',
-            totalPrice: '1',
+            totalPrice: 1,
             currencyCode: 'USD',
             countryCode: 'US',
           },
@@ -62,4 +65,4 @@ function PayWithGoogle() {
   )
 }
 
-export default PayWithGoogle
+export default PayWithGoogle;

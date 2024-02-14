@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import './ProductCreate.css';
 import { useBaseUrl } from '../../BaseUrlContext';
 import { Input, Button } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
 
 function ProductCreates() {
   const [images, setImages] = useState([]);

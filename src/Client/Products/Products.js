@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import './Products.css';
-import { FaEye } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import { useBaseUrl } from '../../BaseUrlContext';
-import Filter from '../Filter/Filter'; // Import the Filter component
-import Input from 'antd/es/input/Input';
-import { Spin, Pagination } from 'antd';
+import Filter from '../Filter/Filter';
+import { Input, Spin, Pagination, Card, Skeleton } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { CartContext } from '../CartContext';
+import { FaCartPlus } from 'react-icons/fa6';
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -16,29 +17,23 @@ function Products() {
   const [filters, setFilters] = useState({
     category: '',
     minPrice: 0,
-    maxPrice: 1000
+    maxPrice: 1000,
   });
   const navigate = useNavigate();
   const { baseUrl } = useBaseUrl();
+  const { addToCart } = useContext(CartContext); // Retrieve addToCart function from CartContext
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Fetch products from the API
         const response = await axios.get(`${baseUrl}/api/products`);
-        const fetchedProducts = response.data;
-
-        // Save products to local storage
-        localStorage.setItem('products', JSON.stringify(fetchedProducts));
-
-        // Set products in the state
-        setProducts(fetchedProducts);
+        localStorage.setItem('products', JSON.stringify(response.data));
+        setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
 
-    // If products are not in local storage, fetch them
     fetchProducts();
   }, [baseUrl]);
 
@@ -49,26 +44,18 @@ function Products() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  // Filter products based on search query and filters
-  const filteredProducts = products && products.filter(product => {
-    return (
-      (product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.category.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (product.price >= filters.minPrice && product.price <= filters.maxPrice) &&
-      (filters.category === '' || product.category.name === filters.category)
-    );
-  });
+  const filteredProducts =
+    products &&
+    products.filter((product) => {
+      return (
+        (product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.category.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+        (product.price >= filters.minPrice && product.price <= filters.maxPrice) &&
+        (filters.category === '' || product.category.name === filters.category)
+      );
+    });
   const currentProducts = filteredProducts && filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // Function to handle applying filters
-  const handleApplyFilter = (filterOptions) => {
-    setFilters(filterOptions);
-  };
 
   const StarRating = ({ rate, count }) => {
     const stars = Array.from({ length: 5 }, (_, index) => (
@@ -80,75 +67,101 @@ function Products() {
     return (
       <div className="star-rating">
         {stars}
-        <span className="rating-text">
-          {rate > 0 ? `${rate} (${count} reviews)` : 'Rating: 0'}
-        </span>
+        <span className="rating-text">{rate > 0 ? `${rate} (${count} reviews)` : 'Rating: 0'}</span>
       </div>
     );
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleApplyFilter = (filterOptions) => {
+    setFilters(filterOptions);
+  };
+
   return (
     <div className="product-container">
-      <div className='filter-search-component'>
-        {/* Filter component with handleApplyFilter prop */}
+      <div className="filter-search-component">
         <Filter onApplyFilter={handleApplyFilter} />
-        <div className='search-component'>
-          <Input
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className="search-component">
+          <Input placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
         </div>
       </div>
 
       {currentProducts ? (
         <div className="product-list">
           {currentProducts.map((product) => (
-            <div key={product._id} className="products" onClick={() => handleCardClick(product)}>
-              <div className="product-card">
-                {product.images && product.images.length > 0 ? (
-                  <img src={product.images[0]} alt={product.title} className="card-img  product-image" />
-                ) : (
-                  <div className="placeholder-image">No Image</div>
-                )}
-                <div className='content-section'>
-                  <div className="card-body">
-                    <div className='body-content'>
-                      <h3 className="card-title product-title">{product.title}</h3>
-                      <p className="card-text product-category">{product.category.name}</p>
+            <div key={product._id} className="products">
+              <Card
+                hoverable
+                className='product-card'
+
+                style={{ width: 240, height: 'auto' }}
+                cover={
+                  product.images && product.images.length > 0 ? (
+                    <img alt={product.title} src={product.images[0]} onClick={() => handleCardClick(product)} style={{ maxHeight: '180px' }} />
+                  ) : (
+                    <Skeleton.Image style={{ maxHeight: '200px' }} active />
+                  )
+                  
+                }
+                actions={[
+                  <EllipsisOutlined
+                    key="ellipsis"
+                    title="More Info"
+                    onClick={() => handleCardClick(product)}
+                    style={{ color: 'blue', fontSize: '25px' }}
+                  />,
+                  <FaCartPlus
+                    key="addCart"
+                    title="Add To Cart"
+                    style={{ color: 'blue', fontSize: '25px' }}
+                    onClick={() => addToCart(product)} // Call addToCart function
+                  />,
+                ]}
+              >
+                <Card.Meta
+                  title={product.title}
+                  onClick={() => handleCardClick(product)}
+                  style={{ color: 'black', textAlign: 'start', marginBottom: '10px' }}
+                  description={
+                    <div>
+                      <p className="product-category">{product.category.name || <Skeleton.Avatar active />}</p>
                       {product.rating ? (
                         <StarRating rate={Math.round(product.rating.rate)} count={product.rating.count} />
                       ) : (
-                        <p className="card-text product-rating">Rating: 0</p>
+                        <p className="product-rating" style={{ fontSize: '15px' }}>
+                          Rating: 0
+                        </p>
                       )}
+                      <p
+                        className="product-price"
+                        style={{ textAlign: 'end', fontSize: '25px', fontWeight: '400' }}
+                      >
+                        ${product.price}
+                      </p>
                     </div>
-                    <div className='card-footer'>
-                      <p className="card-text product-price">${product.price}</p>
-                      <button className="btn " onClick={() => handleCardClick(product)}>
-                        <FaEye className='cart-icon' />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  }
+                />
+              </Card>
             </div>
           ))}
         </div>
       ) : (
-        <div><Spin size='large'/></div>
+        <div>
+          <Spin size="large" />
+        </div>
       )}
-
-      <div className="shadow-lg p-3  rounded pagination">
-        {products && (
-          <Pagination
-            current={currentPage}
-            total={filteredProducts.length}
-            pageSize={itemsPerPage}
-            onChange={paginate}
-            showSizeChanger={false}
-          />
-        )}
-      </div>
+      {products && (
+        <Pagination
+          current={currentPage}
+          total={filteredProducts.length}
+          pageSize={itemsPerPage}
+          onChange={paginate}
+          showSizeChanger={false}
+        />
+      )}
     </div>
   );
 }

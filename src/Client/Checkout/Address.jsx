@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {useBaseUrl} from '../../BaseUrlContext';
+import { useBaseUrl } from '../../BaseUrlContext';
+import { Form, Input, Button, Table, Modal, Card } from 'antd';
+import { toast } from 'react-toastify';
+import './Address.css';
+import { Link } from 'react-router-dom';
 
 function Address() {
-  const {baseUrl} = useBaseUrl();
+  const { baseUrl } = useBaseUrl();
   const [addresses, setAddresses] = useState([]);
   const [hasAddress, setHasAddress] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
-  const [newAddress, setNewAddress] = useState({
-    fullName: '',
-    address: '',
-    city: '',
-    country: '',
-    postalCode: '',
-  });
+  const [form] = Form.useForm();
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
 
   // Fetch addresses on component mount
   useEffect(() => {
@@ -39,9 +39,7 @@ function Address() {
   };
 
   // Function to handle form submission for adding a new address
-  const handleAddAddress = async (e) => {
-    e.preventDefault();
-
+  const handleAddAddress = async (values) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
       const userId = user?._id;
@@ -49,28 +47,24 @@ function Address() {
       if (userId) {
         const response = await axios.post(`${baseUrl}/api/address/add`, {
           user: userId,
-          ...newAddress,
+          ...values,
         });
 
         setAddresses((prevAddresses) => [...prevAddresses, response.data]);
-        setNewAddress({
-          fullName: '',
-          address: '',
-          city: '',
-          country: '',
-          postalCode: '',
-        });
+        toast.success('Address Added Successfully');
+        form.resetFields();
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error adding address:', error);
+      toast.error('Failed to add address');
     }
   };
 
   // Function to handle form submission for updating an existing address
-  const handleUpdateAddress = async (addressId, updatedData) => {
+  const handleUpdateAddress = async (addressId, values) => {
     try {
-        console.log(updatedData);
-      const response = await axios.put(`${baseUrl}/api/address/update/${addressId}`, updatedData);
+      const response = await axios.put(`${baseUrl}/api/address/update/${addressId}`, values);
 
       setAddresses((prevAddresses) =>
         prevAddresses.map((address) =>
@@ -80,125 +74,148 @@ function Address() {
 
       // Reset selected address after update
       setSelectedAddressId(null);
+      setUpdateModalVisible(false);
     } catch (error) {
       console.error('Error updating address:', error);
     }
   };
 
+  // Function to handle address deletion
+  const handleDeleteAddress = async (addressId) => {
+    try {
+      await axios.delete(`${baseUrl}/api/address/delete/${addressId}`);
+      setAddresses((prevAddresses) => prevAddresses.filter((address) => address._id !== addressId));
+      setDeleteModalVisible(false);
+      toast.success('Address Removed');
+    } catch (error) {
+      console.error('Error deleting address:', error);
+    }
+  };
+
+  const columns = [
+    {
+      title: 'Full Name',
+      dataIndex: 'fullName',
+      key: 'fullName',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
+    },
+    {
+      title: 'Country',
+      dataIndex: 'country',
+      key: 'country',
+    },
+    {
+      title: 'Postal Code',
+      dataIndex: 'postalCode',
+      key: 'postalCode',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <>
+        <div className = 'available-address default-nav-section'>
+          <Button.Group>
+            <Button onClick={() => { setSelectedAddressId(record._id); setUpdateModalVisible(true); }}>Update</Button>
+            <Button onClick={() => { setDeleteModalVisible(true); setSelectedAddressId(record._id); }}>Delete</Button>
+          </Button.Group>
+          
+            
+        </div>
+       
+        </>
+      ),
+    },
+  ];
+
   return (
-    <div>
+    <div className='address-component'>
       <h1>Delivery Address</h1>
       {hasAddress ? (
-        <ul>
-          {addresses.map((address) => (
-            <li key={address._id}>
-              <div>Full Name: {address.fullName}</div>
-              <div>Address: {address.address}</div>
-              <div>City: {address.city}</div>
-              <div>Country: {address.country}</div>
-              <div>Postal Code: {address.postalCode}</div>
-
-              {/* Update button */}
-              <button onClick={() => setSelectedAddressId(address._id)}>Update</button>
-
-              {/* Add conditional rendering for update form */}
-              {selectedAddressId === address._id && (
-                <form onSubmit={() => handleUpdateAddress(address._id, /* pass updated data here */)}>
-                  {/* Update form fields */}
-                  <label>
-                    Full Name:
-                    <input
-                      type="text"
-                      value={newAddress.fullName}
-                      onChange={(e) => setNewAddress({ ...newAddress, fullName: e.target.value })}
-                    />
-                  </label>
-                  <label>
-                    Address:
-                    <input
-                      type="text"
-                      value={newAddress.address}
-                      onChange={(e) => setNewAddress({ ...newAddress, address: e.target.value })}
-                    />
-                  </label>
-                  <label>
-                    City:
-                    <input
-                      type="text"
-                      value={newAddress.city}
-                      onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                    />
-                  </label>
-                  <label>
-                    Country:
-                    <input
-                      type="text"
-                      value={newAddress.country}
-                      onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
-                    />
-                  </label>
-                  <label>
-                    Postal Code:
-                    <input
-                      type="text"
-                      value={newAddress.postalCode}
-                      onChange={(e) => setNewAddress({ ...newAddress, postalCode: e.target.value })}
-                    />
-                  </label>
-                  <button type="submit">Update Address</button>
-                </form>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div className='address-field'>
+          <Table dataSource={addresses} columns={columns} />
+          <div className='route-links'>
+          <Link to='/products'>Continue Shopping</Link>
+          <Link to='/checkout'>Proceed To Checkout</Link>
+          </div>
+        </div>
       ) : (
-        <>
-          <form onSubmit={handleAddAddress}>
-            {/* Add form fields for new address */}
-            <label>
-              Full Name:
-              <input
-                type="text"
-                value={newAddress.fullName}
-                onChange={(e) => setNewAddress({ ...newAddress, fullName: e.target.value })}
-              />
-            </label>
-            <label>
-              Address:
-              <input
-                type="text"
-                value={newAddress.address}
-                onChange={(e) => setNewAddress({ ...newAddress, address: e.target.value })}
-              />
-            </label>
-            <label>
-              City:
-              <input
-                type="text"
-                value={newAddress.city}
-                onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-              />
-            </label>
-            <label>
-              Country:
-              <input
-                type="text"
-                value={newAddress.country}
-                onChange={(e) => setNewAddress({ ...newAddress, country: e.target.value })}
-              />
-            </label>
-            <label>
-              Postal Code:
-              <input
-                type="text"
-                value={newAddress.postalCode}
-                onChange={(e) => setNewAddress({ ...newAddress, postalCode: e.target.value })}
-              />
-            </label>
-            <button type="submit">Add Address</button>
-          </form>
-        </>
+        <div>
+          <p>No addresses found.</p>
+          <Form onFinish={handleAddAddress}>
+            <Form.Item name="fullName" label="Full Name">
+              <Input />
+            </Form.Item>
+            <Form.Item name="address" label="Address">
+              <Input />
+            </Form.Item>
+            <Form.Item name="city" label="City">
+              <Input />
+            </Form.Item>
+            <Form.Item name="country" label="Country">
+              <Input />
+            </Form.Item>
+            <Form.Item name="postalCode" label="Postal Code">
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Add Address
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       )}
+
+      {/* Update modal */}
+      <Modal
+        title="Update Address"
+        visible={updateModalVisible}
+        onCancel={() => { setUpdateModalVisible(false); form.resetFields(); }}
+        onOk={() => form.submit()}
+      >
+        <Form
+          form={form}
+          onFinish={(values) => handleUpdateAddress(selectedAddressId, values)}
+        >
+          <Form.Item name="fullName" label="Full Name">
+            <Input />
+          </Form.Item>
+          <Form.Item name="address" label="Address">
+            <Input />
+          </Form.Item>
+          <Form.Item name="city" label="City">
+            <Input />
+          </Form.Item>
+          <Form.Item name="country" label="Country">
+            <Input />
+          </Form.Item>
+          <Form.Item name="postalCode" label="Postal Code">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* Delete confirmation modal */}
+      <Modal
+        title="Delete Address"
+        visible={deleteModalVisible}
+        onCancel={() => setDeleteModalVisible(false)}
+        onOk={() => handleDeleteAddress(selectedAddressId)}
+      >
+        <p>Are you sure you want to delete this address?</p>
+      </Modal>
+        
+      
     </div>
   );
 }

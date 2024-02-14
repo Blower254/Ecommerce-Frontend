@@ -4,8 +4,6 @@ import './Auth.css';
 import GoogleLogin from './GoogleLogin';
 
 function Auth() {
-
-
   return (
     <div className="auth-container">
       <div className="auth-image-section"></div>
@@ -20,7 +18,7 @@ function Auth() {
           Create Account
         </Link>
 
-        <GoogleLogin/>
+        <GoogleLogin />
       </div>
     </div>
   );

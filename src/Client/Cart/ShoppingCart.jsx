@@ -1,38 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { FaArrowsRotate } from 'react-icons/fa6';
-import './ShoppingCart.css';
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlinePreview, MdSave } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import {useBaseUrl} from '../../BaseUrlContext';
+import { Card, Input, Modal, Space } from 'antd';
+import { FaPen } from 'react-icons/fa6';
 import Link from 'antd/es/typography/Link';
-
-
+import { CartContext } from '../CartContext';
+import './ShoppingCart.css';
 
 function ShoppingCart() {
   const [show, setShow] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const navigate = useNavigate();
   const [editedQuantities, setEditedQuantities] = useState({});
   const [isEditingQuantity, setIsEditingQuantity] = useState(false);
-  const {baseUrl} = useBaseUrl();
+  const { removeFromCart, cartItems, updateCartItemQuantity, setCartItems, totalPrice } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const removeFromCart = async (itemId) => {
-    try {
-      await axios.delete(`${baseUrl}/api/cart/remove/${itemId}`);
-      toast.success('Item removed from cart');
-      fetchCart();
-    } catch (error) {
-      toast.error('Error removing item from cart');
-      console.error(error);
-    }
-  };
 
   const handleCheckout = () => {
     toast("Happy Shopping 😊");
@@ -40,34 +25,10 @@ function ShoppingCart() {
     navigate('/checkout');
   };
 
-  const handleViewProduct = (item) => {
+  const handleCardClick = (item) => {
     navigate(`/product/${item.productId}`);
+    handleClose();
   };
-
-  const handleRefresh = () => {
-    try {
-      fetchCart();
-      toast("Refresh Success!");
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
-
-  const fetchCart = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      const { _id: userId } = user;
-      const response = await axios.get(`${baseUrl}/api/cart?userId=${userId}`);
-      const cartData = response.data.cart;
-      setCartItems(cartData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCart();
-  }); 
 
   const toggleEditQuantity = (item) => {
     setEditedQuantities({
@@ -95,13 +56,24 @@ function ShoppingCart() {
 
   const handleQuantityChange = async (item) => {
     try {
-      await axios.put(`${baseUrl}/api/cart/update`, {
-        cartItemId: item.cartItemId,
-        quantity: editedQuantities[item.cartItemId],
-      });
+      const newQuantity = editedQuantities[item.cartItemId];
+      if (newQuantity !== undefined) {
+        // Update the quantity of the item in the cart
+        // This is a placeholder for your actual API call to update the quantity
+        // Replace it with your actual API call to update the quantity
+        await updateCartItemQuantity(item.cartItemId, newQuantity);
 
-      toast.success('Quantity updated successfully');
-      fetchCart();
+        // Update the cart items state with the updated quantity
+        const updatedCartItems = cartItems.map(cartItem => {
+          if (cartItem.cartItemId === item.cartItemId) {
+            return { ...cartItem, quantity: newQuantity };
+          }
+          return cartItem;
+        });
+        setCartItems(updatedCartItems);
+      }
+
+      // Exit edit mode
       setIsEditingQuantity(false);
     } catch (error) {
       toast.error('Error updating quantity');
@@ -116,87 +88,78 @@ function ShoppingCart() {
         <span className='cart-item-count'>{cartItems.length}</span>
       </div>
 
-      <Offcanvas show={show} onHide={handleClose} placement="end" className="off-canvas">
-        <Offcanvas.Header closeButton className='offcanvas-hearder'>
-          <Offcanvas.Title className='offcanvas-title'>Shopping Cart</Offcanvas.Title>
-          <div className='refresh-button'><FaArrowsRotate className='refresh' onClick={handleRefresh} /></div>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          {cartItems.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <ul className='cart-items'>
-              {cartItems.map(item => (
-                <div key={item.cartItemId} className="cart-item-component" >
-                  <div className='cart-img-component'>
-                    <img src={item.image} alt="cart pic" className='cart-img' />
-                  </div>
-                  <div className='item-fields'>
-                    <div className='cart-item-title' onClick={() => handleViewProduct(item)}>{item.title}</div>
-                    <div className='item-info'>
-                      <div className='cart-desc'>{item.description}</div>
-                      <div className='cart-category'>{/*  category  */}</div>
-                      <div className='cart-price'>{item.price}</div>
-                    </div>
-                  </div>
-                  <div className='delete-icon-section'>
+      <Modal title="Shopping Cart" visible={show} onCancel={handleClose} footer={null}>
+        {cartItems.length === 0 ? (
+          <h2>Your cart is empty.</h2>
+        ) : (
+          <Space 
+            direction="vertical"  
+            className='cart-card-component'
+
+          >
+            <h3 className='total-price'>Total Price: ${totalPrice}</h3>
+            
+            {cartItems.map(item => (
+              <Card 
+                key={item.cartItemId}
+               
+                actions={[
+                  <MdDelete
+                    className='cart-trigger-icon'
+                    onClick={() => removeFromCart(item.cartItemId)}
+                    title='Remove From Cart'
+                  />,
+                  <MdOutlinePreview 
+                    className='cart-trigger-icon' 
+                    onClick={() => handleCardClick(item)}
+                    title='Preview Item'
+                  />,
+                  isEditingQuantity ? (
+                    <MdSave className='cart-trigger-icon' onClick={() => handleQuantityChange(item)} title='Save'/>
+                  ) : (
+                    <FaPen
+                      className='cart-trigger-icon'
+                      onClick={() => toggleEditQuantity(item)}
+                      title='Edit Quantity'
+                    />
+                  )
+                ]}
+              >
+                <Space >
+                  <img src={item.image} alt="cart pic" className='cart-img' />
+                  <div>
+                    <h4 strong>{item.title}</h4>
+                    <h5>Price: ${item.price}</h5>
                     {isEditingQuantity ? (
-                      <div className='quantity-edit'>
-                        <button className='quantity-button' onClick={() => handleDecrement(item.cartItemId)}>
-                          -
-                        </button>
-                        <input
+                      <Space className='edit-section'>
+                        <Button onClick={() => handleDecrement(item.cartItemId)}>-</Button>
+                        <Input
                           type='number'
-                          className='quantity-input'
                           value={editedQuantities[item.cartItemId] || 1}
                           onChange={(e) => setEditedQuantities({
                             ...editedQuantities,
                             [item.cartItemId]: parseInt(e.target.value, 10) || 1,
                           })}
-                          min='1'
+                          min={1}
                         />
-                        <button className='quantity-button' onClick={() => handleIncrement(item.cartItemId)}>
-                          +
-                        </button>
-                        <Button
-                          variant='success'
-                          size='sm'
-                          className='edit-quantity-button'
-                          onClick={() => handleQuantityChange(item)}
-                        >
-                          Save
-                        </Button>
-                      </div>
+                        <Button onClick={() => handleIncrement(item.cartItemId)}>+</Button>
+                      </Space>
                     ) : (
-                      <>
-                        <div className='cart-price'>{item.quantity}</div>
-                        <Button
-                          variant='primary'
-                          size='sm'
-                          className='edit-quantity-button'
-                          onClick={() => toggleEditQuantity(item)}
-                        >
-                          Edit
-                        </Button>
-                        <MdDelete
-                          className='cart-delete-icon'
-                          size='sm'
-                          onClick={() => removeFromCart(item.cartItemId)}
-                        />
-                      </>
+                      <Space>
+                        <h6>Quantity: {item.quantity}</h6>
+                      </Space>
                     )}
                   </div>
-                </div>
-              ))}
-            </ul>
-          )}
-        </Offcanvas.Body>
-        <div className='checkout-section'>
-          <Button className="checkout-btn" onClick={handleCheckout}>
-            Checkout
-          </Button>
-        </div>
-      </Offcanvas>
+                </Space>
+              </Card>
+            ))}
+                        
+            <Card className='card-footer'>
+              <Button type="primary" onClick={handleCheckout} >Proceed To Checkout</Button>
+            </Card>
+          </Space>
+        )}
+      </Modal>
     </div>
   );
 }

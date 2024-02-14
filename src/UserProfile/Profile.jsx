@@ -56,7 +56,7 @@ function Profile() {
               <AccountActivities />
             </div>
             <div className='logout-component'>
-             <Button  onClick={handleLogout} className="logout-btn">Logout <LogoutOutlined /> </Button>
+             <Button  onClick={handleLogout} className="logout-btn">Logout <LogoutOutlined className='auth-icon'/> </Button>
             </div>
           </div>
 

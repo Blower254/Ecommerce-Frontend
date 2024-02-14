@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './Product.css';
 import { FaCartPlus } from 'react-icons/fa';
 import { CiCreditCard1 } from 'react-icons/ci';
@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useBaseUrl } from '../../BaseUrlContext';
 import { Image, Button } from 'react-bootstrap'; // Import Bootstrap components
 import { Spin } from 'antd';
+import { CartContext } from '../CartContext'; // Import CartContext
 
 function Product() {
   const { productId } = useParams();
@@ -16,6 +17,7 @@ function Product() {
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // New state to track selected image index
   const { baseUrl } = useBaseUrl();
+  const { addToCart } = useContext(CartContext); // Retrieve addToCart function from CartContext
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,37 +41,6 @@ function Product() {
     }
   }, [productId, baseUrl]);
 
-  const handleAddToCart = () => {
-    try {
-      const user = JSON.parse(localStorage.getItem('user'));
-      const { _id: userId } = user;
-      console.log("current user", userId);
-
-      const newItem = { ...product, userId, quantity: 1 };
-      const updatedItem = { ...newItem, productId: newItem._id };
-      console.log("new item", updatedItem);
-      console.log("items to be added to cart", updatedItem); // 'Item added to the cart successfully'
-
-      axios.post(`${baseUrl}/api/cart/add`, updatedItem)
-
-        .then(response => {
-
-          if (response.data.success) {
-
-            console.log(response.data.message); // 'Item added to the cart successfully'
-            toast.success(response.data.message);
-          } else {
-            console.error('Error:', response.data.message);
-            toast.error("Error Adding Item to Cart");
-          }
-        })
-
-    } catch (error) {
-      console.error('Error parsing user from local storage', error);
-      toast.error('Error adding product to cart');
-    }
-  };
-
   const handleOpenCheckout = () => {
     // Add your logic for opening checkout
   };
@@ -78,9 +49,14 @@ function Product() {
     setSelectedImageIndex(index);
   };
 
+  const handleAddToCart = () => {
+    if (!product) return; // Ensure product is available
+    addToCart(product); // Call addToCart function from CartContext
+  };
+
   if (loading) {
     // Show loading state while waiting for product details
-    return <div><Spin size='large'/> </div>;
+    return <div><Spin size='large'/></div>;
   }
 
   if (!product) {
@@ -93,24 +69,23 @@ function Product() {
       <div className="product-details">
         <div className='product-specs'>
           <div className='image-section'>
-          <div className='image-component'>
-            <Image src={product.images[selectedImageIndex]} className='display-image'rounded />
-            
+            <div className='image-component'>
+              <Image src={product.images[selectedImageIndex]} className='display-image'rounded />
 
-          </div>
-          <div className='all-images'>
-            <div className='image-thumbnails'>
-              {product.images.map((image, index) => (
-                <Image
-                  key={index}
-                  src={image}
-                  alt={`${index}`}
-                  className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
-                  onClick={() => handleThumbnailClick(index)}
-                  rounded fluid
-                />
-              ))}
             </div>
+            <div className='all-images'>
+              <div className='image-thumbnails'>
+                {product.images.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image}
+                    alt={`${index}`}
+                    className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
+                    onClick={() => handleThumbnailClick(index)}
+                    rounded fluid
+                  />
+                ))}
+              </div>
             </div>
           </div>
           <div className="product-info">
@@ -137,7 +112,7 @@ function Product() {
         </div>
 
       </div>
-      
+
     </>
   );
 }
