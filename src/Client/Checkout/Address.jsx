@@ -149,9 +149,9 @@ function Address() {
           </div>
         </div>
       ) : (
-        <div>
+        <div className='address-form-component'>
           <p>No addresses found.</p>
-          <Form onFinish={handleAddAddress}>
+          <Form onFinish={handleAddAddress} style={{maxWidth: '400px'}}>
             <Form.Item name="fullName" label="Full Name">
               <Input />
             </Form.Item>

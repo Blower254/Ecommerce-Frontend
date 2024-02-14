@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useBaseUrl } from '../../BaseUrlContext';
 import PayWithGoogle from './PayWithGoogle';
+import { Button } from 'antd';
 
 const Checkout = () => {
   const baseUrl = useBaseUrl();
@@ -12,6 +13,11 @@ const Checkout = () => {
   // State to store the fetched address
   const [address, setAddress] = useState('');
   const [userId, setUserId] = useState('');
+
+
+  const handleAddress = () => {
+    navigate('/delivery-address');
+  }
 
   useEffect(() => {
     // Get user ID from local storage
@@ -29,9 +35,7 @@ const Checkout = () => {
           const response = await axios.get(`${baseUrl}/api/address?userId=${userId}`);
           setAddress(response.data.address || 'Address not available'); // Assuming the address is directly available in response.data
           console.log(response.data);
-          if (!response.data.address) {
-            navigate('/delivery-address');
-          }
+
         }
       } catch (error) {
         console.error('Error fetching address:', error);
@@ -45,6 +49,7 @@ const Checkout = () => {
   return (
     <div>
       <p>{address.split('|').join(' | ')}</p>
+      <Button onClick={handleAddress}>Add or Update Delivery Address</Button>
       <PayWithGoogle />
     </div>
   );
