@@ -29,6 +29,9 @@ const Checkout = () => {
           const response = await axios.get(`${baseUrl}/api/address?userId=${userId}`);
           setAddress(response.data.address || 'Address not available'); // Assuming the address is directly available in response.data
           console.log(response.data);
+          if (!response.data.address) {
+            navigate('/delivery-address');
+          }
         }
       } catch (error) {
         console.error('Error fetching address:', error);

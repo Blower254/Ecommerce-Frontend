@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loading from '../../Client/Loading/Loading';
@@ -27,7 +27,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 function Signup() {
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { baseUrl } = useBaseUrl();
 
@@ -46,7 +46,7 @@ function Signup() {
 
       // Update the context with the new data
       // The user state should be updated at this point, so it should log correctly in useEffect
-      navigate('/auth/login');
+      //navigate('/auth/login');
       toast.success('Account Created Successfully');
     } catch (error) {
       toast.error("Error Signing Up! Ensure to use Unique Username or Login");
