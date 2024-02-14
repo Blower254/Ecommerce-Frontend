@@ -1,25 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import './Auth.css';
 import GoogleLogin from './GoogleLogin';
 
 function Auth() {
+  const navigate = useNavigate(); 
+ 
+  const handleLogin = () => {
+    navigate('/auth/login'); 
+  };
+
+  // Function to handle signup button click
+  const handleSignup = () => {
+    navigate('/auth/signup');
+  };
+
   return (
     <div className="auth-container">
-      <div className="auth-image-section"></div>
-      <div className="auth-actions-section">
-        {/* Use Link for navigation to /login */}
-        <Link to="/auth/login" className="login-button">
-          Login
-        </Link>
-        
-        {/* Use Link for navigation to /signup */}
-        <Link to="/auth/signup" className="create-account-button">
-          Create Account
-        </Link>
-
-        <GoogleLogin />
-      </div>
+      <Button className='login-button' onClick={handleLogin}>Login</Button>
+      <Button className='signup-button' onClick={handleSignup}>Signup</Button>
+      <GoogleLogin />
     </div>
   );
 }

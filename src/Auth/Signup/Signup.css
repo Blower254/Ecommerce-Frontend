@@ -1,15 +1,16 @@
 /* Signup.css */
 
 .signup-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh ;
    
   }
-  
+  .signup-form{
+    width: 400px;
+  }
   .signup-heading {
     text-align: center;
     color: #333;
@@ -21,7 +22,6 @@
   }
   
   .form-control {
-    width: 100%;
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -54,4 +54,9 @@
     background-color: #2980b9;
     color: #fff;
   }
+  @media screen and (max-width: 768px) {
   
+    .signup-form{
+      width: 90%;
+    }
+  }

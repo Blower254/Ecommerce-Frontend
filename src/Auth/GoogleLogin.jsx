@@ -4,6 +4,8 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase'; // Update the path accordingly
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
+import { Button } from 'antd';
+import './Auth.css';
 
 function GoogleLogin() {
   const navigate = useNavigate();
@@ -44,12 +46,12 @@ function GoogleLogin() {
   };
 
   return (
-    <button
-      className='btn google-login'
+    <Button
+      className='google-login'
       onClick={handleLoginWithGoogle}
     >
       Continue With Google <FaGoogle className='google-icon' />
-    </button>
+    </Button>
   );
 }
 

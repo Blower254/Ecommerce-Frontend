@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import {  Button, Menu } from "antd";
 import "./Nav.css";
@@ -14,7 +14,7 @@ import { FaUserCircle } from "react-icons/fa";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -33,6 +33,9 @@ const Navbar = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleAuth = () =>{
+    navigate('/auth');
+  };
  
 
   const toggleMenu = () => {
@@ -84,12 +87,7 @@ const Navbar = () => {
            </>   
           ) : (
             <div className="auth">
-              <Link to="/auth/signup" className="nav-link">
-                <Button>Sign Up</Button>
-              </Link>
-              <Link to="/auth/login" className="nav-link">
-              <Button>Login</Button>
-              </Link>
+              <Button onClick={handleAuth}>Login/Signup</Button>
             </div>
           )}
         </div>

@@ -59,7 +59,7 @@ function Login() {
         validationSchema={LoginSchema}
         onSubmit={handleLogin}
       >
-        <Form>
+        <Form className='login-form'>
           {/* Email input */}
           <div className="form-floating mb-3">
             <Field type="email" id="email" name="email" className="form-control" placeholder="name@example.com" />
